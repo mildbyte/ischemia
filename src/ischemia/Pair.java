@@ -19,32 +19,39 @@ public class Pair extends SchemeObject {
 	public void setCdr(SchemeObject cdr) {this.cdr = cdr;}
 
 	public SchemeObject eval(Environment env) throws EvalException {
-		if (car.equals(Symbol.quoteSymbol)) {
-			return ((Pair)cdr).car;
-		}
+		SchemeObject toEval = this;
 		
-		if (car.equals(Symbol.setSymbol)) {
-			env.setVariableValue(pcdr().car, pcdr().pcdr().car.eval(env));
-			return Symbol.okSymbol;
-		}
-		
-		if (car.equals(Symbol.defineSymbol)) {
-			env.defineVariable(pcdr().car, pcdr().pcdr().car.eval(env));
-			return Symbol.okSymbol;
-		}
-		
-		if (car.equals(Symbol.ifSymbol)) {
-			if (!pcdr().car.eval(env).equals(Boolean.FalseValue)) {
-				return pcdr().pcdr().car.eval(env);
-			} else {
-				if (pcdr().pcdr().cdr.equals(EmptyList.makeEmptyList())) {
-					return Boolean.FalseValue;
-				}
-				return pcdr().pcdr().pcdr().car.eval(env);
+		while (true) {
+			Pair pToEval = (Pair)toEval;			
+			if (car.equals(Symbol.quoteSymbol)) {
+				return (pToEval.pcdr().car);
 			}
+			
+			if (car.equals(Symbol.setSymbol)) {
+				env.setVariableValue(pToEval.pcdr().car, pToEval.pcdr().pcdr().car.eval(env));
+				return Symbol.okSymbol;
+			}
+			
+			if (car.equals(Symbol.defineSymbol)) {
+				env.defineVariable(pToEval.pcdr().car, pToEval.pcdr().pcdr().car.eval(env));
+				return Symbol.okSymbol;
+			}
+			
+			if (car.equals(Symbol.ifSymbol)) {
+				if (!pToEval.pcdr().car.eval(env).equals(Boolean.FalseValue)) {
+					toEval = pToEval.pcdr().pcdr().car;
+				} else {
+					if (pcdr().pcdr().cdr.equals(EmptyList.makeEmptyList())) {
+						return Boolean.FalseValue;
+					}
+					toEval = pToEval.pcdr().pcdr().pcdr().car;
+				}
+				if (toEval instanceof Pair) continue;
+				return toEval.eval(env);				
+			}
+			throw new EvalException("Cannot evaluate expression!");			
 		}
 		
-		throw new EvalException("Cannot evaluate expression!");
 	}
 	
 	public String printPair() {
