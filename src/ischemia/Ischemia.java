@@ -24,10 +24,13 @@ public class Ischemia {
 			} catch (IOException e) {
 				return;
 			}
-			
-			SchemeObject object = SchemeReader.read(input);
-			System.out.print(object.eval());
-			System.out.println();
+			try {
+				SchemeObject object = SchemeReader.read(input);
+				System.out.print(object.eval());
+				System.out.println();
+			} catch (ParseException e) {
+				System.out.println(e.getMessage());
+			}
 		}
 	}
 }
