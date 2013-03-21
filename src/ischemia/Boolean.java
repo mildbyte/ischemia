@@ -16,11 +16,11 @@ public class Boolean extends SchemeObject {
 	
 	private Boolean(boolean value) {this.value = value;}
 	
-	public static Boolean makeBoolean(String expression) throws UnknownBooleanLiteralException {
+	public static Boolean makeBoolean(String expression) throws ParseException {
 		if (expression.equals("#t")) {
 			return True;
 		} else if (expression.equals("#f")) {
 			return False;
-		} else throw new UnknownBooleanLiteralException();
+		} else throw new ParseException("Unknown boolean literal.");
 	}
 }
