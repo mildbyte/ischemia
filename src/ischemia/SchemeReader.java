@@ -7,6 +7,7 @@ public class SchemeReader {
 	private static boolean isDelimiter(char c) {
 		return (c == ' ' || c == '\t' || c == '\n');
 	}
+	
 	private static char peek(BufferedReader reader) throws IOException {
 		reader.mark(1);
 		char result = (char)reader.read();
@@ -117,6 +118,10 @@ public class SchemeReader {
 			return Boolean.makeBoolean(expression);
 		}
 		
-		return new Fixnum(Integer.parseInt(expression));
+		try {
+			return new Fixnum(Integer.parseInt(expression));
+		} catch(NumberFormatException e) {
+			return Symbol.makeSymbol(expression);
+		}
 	}
 }
