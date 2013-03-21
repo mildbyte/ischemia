@@ -27,6 +27,13 @@ public class SchemeReader {
 					expression += current;
 				} while (true);
 				return new StringLiteral(expression);
+			} else if (current == '(') {
+				do {
+					current = (char)reader.read();
+				} while (current == ' ' || current == '\t' || current == '\n');
+				
+				if (current != ')') throw new ParseException("Invalid empty list");
+				return EmptyList.makeEmptyList();
 			} else {
 				expression = current + reader.readLine();
 			}
