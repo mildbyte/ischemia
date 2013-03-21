@@ -32,7 +32,18 @@ public class Pair extends SchemeObject {
 			env.defineVariable(pcdr().car, pcdr().pcdr().car.eval(env));
 			return Symbol.okSymbol;
 		}
-
+		
+		if (car.equals(Symbol.ifSymbol)) {
+			if (!pcdr().car.eval(env).equals(Boolean.FalseValue)) {
+				return pcdr().pcdr().car.eval(env);
+			} else {
+				if (pcdr().pcdr().cdr.equals(EmptyList.makeEmptyList())) {
+					return Boolean.FalseValue;
+				}
+				return pcdr().pcdr().pcdr().car.eval(env);
+			}
+		}
+		
 		throw new EvalException("Cannot evaluate expression!");
 	}
 	

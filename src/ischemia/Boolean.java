@@ -1,8 +1,8 @@
 package ischemia;
 
 public class Boolean extends SchemeObject {
-	private static Boolean True = new Boolean(true);
-	private static Boolean False = new Boolean(false);
+	public static Boolean TrueValue = new Boolean(true);
+	public static Boolean FalseValue = new Boolean(false);
 	
 	private boolean value;
 	public boolean getValue() {return value;}
@@ -18,9 +18,9 @@ public class Boolean extends SchemeObject {
 	
 	public static Boolean makeBoolean(String expression) throws ParseException {
 		if (expression.equals("#t")) {
-			return True;
+			return TrueValue;
 		} else if (expression.equals("#f")) {
-			return False;
+			return FalseValue;
 		} else throw new ParseException("Unknown boolean literal.");
 	}
 }
