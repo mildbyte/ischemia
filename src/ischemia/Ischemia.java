@@ -17,15 +17,9 @@ public class Ischemia {
 		
 		while (true) {
 			System.out.print("> ");
-			String input;
-			
+
 			try {
-				input = in.readLine();
-			} catch (IOException e) {
-				return;
-			}
-			try {
-				SchemeObject object = SchemeReader.read(input);
+				SchemeObject object = SchemeReader.read(in);
 				System.out.print(object.eval().print());
 				System.out.println();
 			} catch (ParseException e) {
