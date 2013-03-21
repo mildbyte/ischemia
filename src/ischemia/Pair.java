@@ -9,6 +9,9 @@ public class Pair extends SchemeObject {
 		this.cdr = cdr;
 	}
 	
+	private Pair pcar() {return (Pair)car;}
+	private Pair pcdr() {return (Pair)cdr;}
+	
 	public SchemeObject car() {return car;}
 	public SchemeObject cdr() {return cdr;}
 	
@@ -21,15 +24,15 @@ public class Pair extends SchemeObject {
 		}
 		
 		if (car.equals(Symbol.setSymbol)) {
-			env.setVariableValue(((Pair)cdr).car, ((Pair)((Pair)cdr).cdr).car);
+			env.setVariableValue(pcdr().car, pcdr().pcdr().car.eval(env));
 			return Symbol.okSymbol;
 		}
 		
 		if (car.equals(Symbol.defineSymbol)) {
-			env.defineVariable(((Pair)cdr).car, ((Pair)((Pair)cdr).cdr).car);
+			env.defineVariable(pcdr().car, pcdr().pcdr().car.eval(env));
 			return Symbol.okSymbol;
-		}		
-		
+		}
+
 		throw new EvalException("Cannot evaluate expression!");
 	}
 	
