@@ -5,7 +5,7 @@ public class StringLiteral extends SchemeObject {
 	public String getValue() {return value;}
 	public StringLiteral(String value) {this.value = value;}
 	
-	public SchemeObject eval() {
+	public SchemeObject eval(Environment env) {
 		return this;
 	}
 

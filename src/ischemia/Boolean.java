@@ -7,7 +7,7 @@ public class Boolean extends SchemeObject {
 	private boolean value;
 	public boolean getValue() {return value;}
 	
-	public SchemeObject eval() {
+	public SchemeObject eval(Environment env) {
 		return this;
 	}
 	public String print() {

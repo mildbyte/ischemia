@@ -11,11 +11,24 @@ public class Pair extends SchemeObject {
 	
 	public SchemeObject car() {return car;}
 	public SchemeObject cdr() {return cdr;}
+	
+	public void setCar(SchemeObject car) {this.car = car;}
+	public void setCdr(SchemeObject cdr) {this.cdr = cdr;}
 
-	public SchemeObject eval() throws EvalException {
+	public SchemeObject eval(Environment env) throws EvalException {
 		if (car.equals(Symbol.quoteSymbol)) {
 			return ((Pair)cdr).car;
 		}
+		
+		if (car.equals(Symbol.setSymbol)) {
+			env.setVariableValue(((Pair)cdr).car, ((Pair)((Pair)cdr).cdr).car);
+			return Symbol.okSymbol;
+		}
+		
+		if (car.equals(Symbol.defineSymbol)) {
+			env.defineVariable(((Pair)cdr).car, ((Pair)((Pair)cdr).cdr).car);
+			return Symbol.okSymbol;
+		}		
 		
 		throw new EvalException("Cannot evaluate expression!");
 	}

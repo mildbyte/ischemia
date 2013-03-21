@@ -13,14 +13,16 @@ public class Ischemia {
 		System.out.println("Welcome to Ischemia.");
 		System.out.println("Use Ctrl+C to exit.");
 		
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));		
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		
+		Environment globalEnv = new Environment();
 		
 		while (true) {
 			System.out.print("> ");
 
 			try {
 				SchemeObject object = SchemeReader.read(in);
-				System.out.print(object.eval().print());
+				System.out.print(object.eval(globalEnv).print());
 				System.out.println();
 			} catch (ParseException e) {
 			 	System.out.println(e.getMessage());

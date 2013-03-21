@@ -6,6 +6,6 @@ public class Fixnum extends SchemeObject {
 	public int getNumber() {return number;}
 	public Fixnum(int number) {this.number = number;}
 	
-	public SchemeObject eval() {return this;}
+	public SchemeObject eval(Environment env) {return this;}
 	public String print() {return Integer.toString(number);}
 }
