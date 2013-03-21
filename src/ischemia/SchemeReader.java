@@ -102,6 +102,10 @@ public class SchemeReader {
 			} else if (current == '(') {
 				skipWhitespace(reader);
 				return readPair(reader);
+			} else if (current == '\'') {
+				return new Pair(Symbol.quoteSymbol, 
+					   new Pair(read(reader), 
+							    EmptyList.makeEmptyList()));
 			} else {
 				expression = current + readToDelimiter(reader);
 			}

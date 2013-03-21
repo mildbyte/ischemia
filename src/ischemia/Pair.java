@@ -12,8 +12,12 @@ public class Pair extends SchemeObject {
 	public SchemeObject car() {return car;}
 	public SchemeObject cdr() {return cdr;}
 
-	public SchemeObject eval() {
-		return this;
+	public SchemeObject eval() throws EvalException {
+		if (car.equals(Symbol.quoteSymbol)) {
+			return ((Pair)cdr).car;
+		}
+		
+		throw new EvalException("Cannot evaluate expression!");
 	}
 	
 	public String printPair() {

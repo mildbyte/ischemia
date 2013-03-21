@@ -3,8 +3,8 @@ package ischemia;
 public class EmptyList extends SchemeObject {
 	private static EmptyList list = new EmptyList(); 
 	
-	public SchemeObject eval() {
-		return this;
+	public SchemeObject eval() throws EvalException {
+		throw new EvalException("Cannot evaluate the expression!");
 	}
 
 	public String print() {

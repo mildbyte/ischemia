@@ -23,6 +23,8 @@ public class Ischemia {
 				System.out.print(object.eval().print());
 				System.out.println();
 			} catch (ParseException e) {
+			 	System.out.println(e.getMessage());
+			} catch (EvalException e) {
 				System.out.println(e.getMessage());
 			}
 		}
