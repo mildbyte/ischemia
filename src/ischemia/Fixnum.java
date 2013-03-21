@@ -5,5 +5,7 @@ public class Fixnum extends SchemeObject {
 	
 	public int getNumber() {return number;}
 	public Fixnum(int number) {this.number = number;}
-	public String eval() {return Integer.toString(number);}
+	
+	public SchemeObject eval() {return this;}
+	public String print() {return Integer.toString(number);}
 }
