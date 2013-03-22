@@ -16,6 +16,7 @@ public class Ischemia {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		
 		Environment globalEnv = new Environment();
+		PrimitiveProcedures.installProcedures(globalEnv);
 		
 		while (true) {
 			System.out.print("> ");

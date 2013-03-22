@@ -14,6 +14,7 @@ public class Symbol extends SchemeObject {
 	public static Symbol defineSymbol = makeActualSymbol("define");
 	public static Symbol okSymbol = makeActualSymbol("ok");
 	public static Symbol ifSymbol = makeActualSymbol("if");
+	public static Symbol plusSymbol = makeActualSymbol("+");
 	
 	private Symbol(String value) {this.value = value;}
 	

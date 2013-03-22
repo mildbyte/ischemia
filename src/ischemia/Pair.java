@@ -23,6 +23,14 @@ public class Pair extends SchemeObject {
 	public void setCar(SchemeObject car) {this.car = car;}
 	public void setCdr(SchemeObject cdr) {this.cdr = cdr;}
 	
+	/**
+	 * Evaluates all objects in a list
+	 */
+	private static SchemeObject evalAll(Environment env, SchemeObject obj) throws EvalException {
+		if (obj instanceof EmptyList) return obj;
+		return new Pair(((Pair)obj).car().evaluate(env), evalAll(env, ((Pair)obj).cdr()));
+	}
+	
 	public EvaluationResult eval(Environment env) throws EvalException {
 		//Unquote quoted lists when evaluating
 		if (car.equals(Symbol.quoteSymbol)) {
@@ -53,9 +61,17 @@ public class Pair extends SchemeObject {
 				}
 				//Otherwise, we will evaluate that expression
 				return EvaluationResult.makeUnfinished(pcdr().pcdr().pcdr().car);
-			}				
+			}
 		}
-		throw new EvalException("Cannot evaluate expression!");			
+		
+		//Evaluate procedure application
+		SchemeObject procedure = env.lookupValue(car);
+		
+		if (!(procedure instanceof Procedure)) {
+			throw new EvalException("Unknown procedure!");
+		}
+		
+		return ((Procedure)procedure).evalProcedure(env, evalAll(env, cdr));
 	}
 	
 	public String printPair() {
