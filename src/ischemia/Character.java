@@ -1,5 +1,6 @@
 package ischemia;
 
+//A self-evaluating character
 public class Character extends SchemeObject {
 	private char value;
 	public char getValue() {return value;}

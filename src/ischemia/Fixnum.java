@@ -1,5 +1,6 @@
 package ischemia;
 
+//An integer number.
 public class Fixnum extends SchemeObject {
 	private int number;
 	

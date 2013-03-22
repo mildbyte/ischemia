@@ -1,5 +1,6 @@
 package ischemia;
 
+//A singleton encapsulating True or False
 public class Boolean extends SchemeObject {
 	public static Boolean TrueValue = new Boolean(true);
 	public static Boolean FalseValue = new Boolean(false);

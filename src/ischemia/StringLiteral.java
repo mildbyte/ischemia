@@ -1,5 +1,10 @@
 package ischemia;
 
+
+/**
+ * A self-evaluating string literal.
+ *
+ */
 public class StringLiteral extends SchemeObject {
 	private String value;
 	public String getValue() {return value;}

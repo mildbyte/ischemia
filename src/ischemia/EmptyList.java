@@ -1,5 +1,10 @@
 package ischemia;
 
+
+/**
+ * An empty list singleton.
+ *
+ */
 public class EmptyList extends SchemeObject {
 	private static EmptyList list = new EmptyList(); 
 	
