@@ -13,7 +13,7 @@ public class Character extends SchemeObject {
 		throw new ParseException("Unknown character literal!");
 	}
 	
-	private Character(char value) {this.value = value;}
+	public Character(char value) {this.value = value;}
 	
 	public EvaluationResult eval(Environment env) {
 		return EvaluationResult.makeFinished(this);

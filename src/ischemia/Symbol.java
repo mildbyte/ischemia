@@ -9,12 +9,11 @@ public class Symbol extends SchemeObject {
 	private static HashMap<String, Symbol> symbolTable = new HashMap<>();
 	
 	//The symbols that are available by default.
-	public static Symbol quoteSymbol = makeActualSymbol("quote");
-	public static Symbol setSymbol = makeActualSymbol("set!");
-	public static Symbol defineSymbol = makeActualSymbol("define");
-	public static Symbol okSymbol = makeActualSymbol("ok");
-	public static Symbol ifSymbol = makeActualSymbol("if");
-	public static Symbol plusSymbol = makeActualSymbol("+");
+	public static Symbol quoteSymbol = unsafeMakeSymbol("quote");
+	public static Symbol setSymbol = unsafeMakeSymbol("set!");
+	public static Symbol defineSymbol = unsafeMakeSymbol("define");
+	public static Symbol okSymbol = unsafeMakeSymbol("ok");
+	public static Symbol ifSymbol = unsafeMakeSymbol("if");
 	
 	private Symbol(String value) {this.value = value;}
 	
@@ -38,7 +37,7 @@ public class Symbol extends SchemeObject {
 	/**
 	 * Called by the creator of initial symbols since we know that those are valid
 	 */
-	private static Symbol makeActualSymbol(String symbol) {
+	public static Symbol unsafeMakeSymbol(String symbol) {
 		//Return the symbol from the table if it already exists,
 		//create it otherwise.
 		if (symbolTable.containsKey(symbol)) return symbolTable.get(symbol);
@@ -51,11 +50,11 @@ public class Symbol extends SchemeObject {
 	
 	public static Symbol makeSymbol(String symbol) throws ParseException {
 		//Now you have two problems.
-		if (!symbol.matches("^[a-zA-Z0-9\\+-=/\\*\\!]+$")) {
+		if (!symbol.matches("^[a-zA-Z0-9\\+-=/\\*\\!\\?><]+$")) {
 			throw new ParseException("Invalid symbol!");
 		}
 		
-		return makeActualSymbol(symbol);
+		return unsafeMakeSymbol(symbol);
 	}
 
 }
