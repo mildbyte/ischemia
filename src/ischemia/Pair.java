@@ -43,8 +43,17 @@ public class Pair extends SchemeObject {
 			return EvaluationResult.makeFinished(Symbol.okSymbol);
 		}
 		
-		//Define a variable in the current environment, overwriting it if it exists.
+		//Define a variable or a procedure in the current environment, overwriting it if it exists.
 		if (car.equals(Symbol.defineSymbol)) {
+			if (pcdr() instanceof Pair) { //It's a procedure!
+				//The first element in the first argument is the name,
+				//the rest are the parameters
+				//the second argument is the procedure body
+				env.defineVariable(pcdr().pcar().car, 
+						new CompoundProcedure(pcdr().pcar().cdr, pcdr().cdr));
+				return EvaluationResult.makeFinished(Symbol.okSymbol);
+						
+			}
 			env.defineVariable(pcdr().car, pcdr().pcdr().car.evaluate(env));
 			return EvaluationResult.makeFinished(Symbol.okSymbol);
 		}
