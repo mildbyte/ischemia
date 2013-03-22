@@ -22,7 +22,7 @@ public class Ischemia {
 
 			try {
 				SchemeObject object = SchemeReader.read(in);
-				System.out.print(object.eval(globalEnv).print());
+				System.out.print(object.evaluate(globalEnv).print());
 				System.out.println();
 			} catch (ParseException e) {
 			 	System.out.println(e.getMessage());

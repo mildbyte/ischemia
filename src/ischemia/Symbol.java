@@ -19,9 +19,9 @@ public class Symbol extends SchemeObject {
 	
 	public String getValue() {return value;}
 	
-	public SchemeObject eval(Environment env) throws EvalException {
+	public EvaluationResult eval(Environment env) throws EvalException {
 		//For a variable, looks up its value in the environment.
-		return env.lookupValue(this);
+		return EvaluationResult.makeFinished(env.lookupValue(this));
 	}
 
 	public String print() {

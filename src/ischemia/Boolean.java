@@ -8,8 +8,8 @@ public class Boolean extends SchemeObject {
 	private boolean value;
 	public boolean getValue() {return value;}
 	
-	public SchemeObject eval(Environment env) {
-		return this;
+	public EvaluationResult eval(Environment env) {
+		return EvaluationResult.makeFinished(this);
 	}
 	public String print() {
 		return value ? "#t" : "#f";

@@ -23,58 +23,39 @@ public class Pair extends SchemeObject {
 	public void setCar(SchemeObject car) {this.car = car;}
 	public void setCdr(SchemeObject cdr) {this.cdr = cdr;}
 	
-	
-	/* (non-Javadoc)
-	 * @see ischemia.SchemeObject#eval(ischemia.Environment)
-	 */
-	public SchemeObject eval(Environment env) throws EvalException {
-		//The object we are evaluating (can change as we traverse if expressions.
-		//Used to avoid recursing since Java doesn't have tail call optimization.
-		SchemeObject toEval = this;
-		
-		while (true) {
-			Pair pToEval = (Pair)toEval;
-			
-			//Unquote quoted lists when evaluating
-			if (car.equals(Symbol.quoteSymbol)) {
-				return (pToEval.pcdr().car);
-			}
-			
-			//Mutate the value in the current environment if it exists
-			if (car.equals(Symbol.setSymbol)) {
-				env.setVariableValue(pToEval.pcdr().car, pToEval.pcdr().pcdr().car.eval(env));
-				return Symbol.okSymbol;
-			}
-			
-			//Define a variable in the current environment, overwriting it if it exists.
-			if (car.equals(Symbol.defineSymbol)) {
-				env.defineVariable(pToEval.pcdr().car, pToEval.pcdr().pcdr().car.eval(env));
-				return Symbol.okSymbol;
-			}
-			
-			//Evaluate the If symbol
-			if (car.equals(Symbol.ifSymbol)) {
-				//Anything that's not explicitly false is true
-				if (!pToEval.pcdr().car.eval(env).equals(Boolean.FalseValue)) {
-					toEval = pToEval.pcdr().pcdr().car;
-				} else {
-					//If there is no "false" parameter, return false
-					if (pcdr().pcdr().cdr.equals(EmptyList.makeEmptyList())) {
-						return Boolean.FalseValue;
-					}
-					//Otherwise, we will evaluate that expression
-					toEval = pToEval.pcdr().pcdr().pcdr().car;
-				}
-				//If the thing we're evaluating next is a pair, we can use the
-				//tail call optimization (jump to the beginning)
-				if (toEval instanceof Pair) continue;
-				
-				//Otherwise, we have to recurse as we have no idea how to evaluate it
-				return toEval.eval(env);				
-			}
-			throw new EvalException("Cannot evaluate expression!");			
+	public EvaluationResult eval(Environment env) throws EvalException {
+		//Unquote quoted lists when evaluating
+		if (car.equals(Symbol.quoteSymbol)) {
+			return EvaluationResult.makeFinished(pcdr().car);
 		}
 		
+		//Mutate the value in the current environment if it exists
+		if (car.equals(Symbol.setSymbol)) {
+			env.setVariableValue(pcdr().car, pcdr().pcdr().car.evaluate(env));
+			return EvaluationResult.makeFinished(Symbol.okSymbol);
+		}
+		
+		//Define a variable in the current environment, overwriting it if it exists.
+		if (car.equals(Symbol.defineSymbol)) {
+			env.defineVariable(pcdr().car, pcdr().pcdr().car.evaluate(env));
+			return EvaluationResult.makeFinished(Symbol.okSymbol);
+		}
+		
+		//Evaluate the If symbol
+		if (car.equals(Symbol.ifSymbol)) {
+			//Anything that's not explicitly false is true
+			if (!pcdr().car.eval(env).equals(Boolean.FalseValue)) {
+				return EvaluationResult.makeUnfinished(pcdr().pcdr().car);
+			} else {
+				//If there is no "false" parameter, return false
+				if (pcdr().pcdr().cdr.equals(EmptyList.makeEmptyList())) {
+					return EvaluationResult.makeFinished(Boolean.FalseValue);
+				}
+				//Otherwise, we will evaluate that expression
+				return EvaluationResult.makeUnfinished(pcdr().pcdr().pcdr().car);
+			}				
+		}
+		throw new EvalException("Cannot evaluate expression!");			
 	}
 	
 	public String printPair() {

@@ -15,8 +15,8 @@ public class Character extends SchemeObject {
 	
 	private Character(char value) {this.value = value;}
 	
-	public SchemeObject eval(Environment env) {
-		return this;
+	public EvaluationResult eval(Environment env) {
+		return EvaluationResult.makeFinished(this);
 	}
 
 	public String print() {
