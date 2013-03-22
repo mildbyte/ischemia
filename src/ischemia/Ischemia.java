@@ -17,6 +17,7 @@ public class Ischemia {
 		
 		Environment globalEnv = new Environment();
 		PrimitiveProcedures.installProcedures(globalEnv);
+		StandardLibrary.installSTL(globalEnv);
 		
 		while (true) {
 			System.out.print("> ");

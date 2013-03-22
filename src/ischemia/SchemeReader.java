@@ -2,17 +2,22 @@ package ischemia;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 
 //The Scheme lexer
 public class SchemeReader {
+	public static SchemeObject parseString(String s) throws ParseException {
+		//Create a bogus BufferedReader that would give the string back
+		//to the read() function
+		return read(new BufferedReader(new StringReader(s)));
+	}
+	
 	private static boolean isDelimiter(char c) {
 		return (c == ' ' || c == '\t' || c == '\n');
 	}
 	
 	/**
-	 * 
 	 * Returns one character from the reader without advancing it.
-	 * 
 	 */
 	private static char peek(BufferedReader reader) throws IOException {
 		reader.mark(1);
@@ -24,7 +29,6 @@ public class SchemeReader {
 	
 	/**
 	 * Reads the buffer until all whitespace has been consumed.
-	 * 
 	 */
 	private static void skipWhitespace(BufferedReader reader) throws IOException {
 		char current;
