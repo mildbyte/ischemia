@@ -52,7 +52,7 @@ public class Pair extends SchemeObject {
 		//Evaluate the If symbol
 		if (car.equals(Symbol.ifSymbol)) {
 			//Anything that's not explicitly false is true
-			if (!pcdr().car.eval(env).equals(Boolean.FalseValue)) {
+			if (!pcdr().car.evaluate(env).equals(Boolean.FalseValue)) {
 				return EvaluationResult.makeUnfinished(pcdr().pcdr().car);
 			} else {
 				//If there is no "false" parameter, return false
