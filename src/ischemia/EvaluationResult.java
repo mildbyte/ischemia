@@ -7,22 +7,25 @@ package ischemia;
 public class EvaluationResult {
 	private boolean evaluationFinished;
 	private SchemeObject result;
+	private Environment environment;
 	
 	//The constructor is made private, the object can only be created by using the
 	//static methods below.
-	private EvaluationResult(boolean evaluationFinished, SchemeObject result) {
+	private EvaluationResult(boolean evaluationFinished, SchemeObject result, Environment environment) {
 		this.evaluationFinished = evaluationFinished;
 		this.result = result;
+		this.environment = environment;
 	}
 	
 	public boolean isFinished() {return evaluationFinished;}
 	public SchemeObject getResult() {return result;}
+	public Environment getEnvironment() {return environment;}
 	
 	public static EvaluationResult makeFinished(SchemeObject result) {
-		return new EvaluationResult(true, result);
+		return new EvaluationResult(true, result, null);
 	}
 	
-	public static EvaluationResult makeUnfinished(SchemeObject result) {
-		return new EvaluationResult(false, result);
+	public static EvaluationResult makeUnfinished(SchemeObject result, Environment environment) {
+		return new EvaluationResult(false, result, environment);
 	}
 }

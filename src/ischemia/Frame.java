@@ -9,6 +9,20 @@ public class Frame {
 		mappings = new HashMap<>();
 	}
 	
+	
+	/**
+	 * Makes a frame from two lists of variables and values
+	 */
+	public Frame(SchemeObject variables, SchemeObject values) {
+		mappings = new HashMap<>();
+		while (!(variables instanceof EmptyList) && !(values instanceof EmptyList)) {
+			mappings.put(((Pair)variables).car(), ((Pair)values).car());
+			
+			variables = ((Pair)variables).cdr();
+			values = ((Pair)values).cdr();
+		}
+	}
+	
 	/**
 	 * Looks up the variable in the table, returns null if not found.
 	 */

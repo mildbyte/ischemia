@@ -14,7 +14,7 @@ public abstract class SchemeObject {
 	public final SchemeObject evaluate(Environment environment) throws EvalException {
 		EvaluationResult evalResult = this.eval(environment);
 		while (!evalResult.isFinished()) {
-			evalResult = evalResult.getResult().eval(environment);
+			evalResult = evalResult.getResult().eval(evalResult.getEnvironment());
 		}
 		
 		return evalResult.getResult();

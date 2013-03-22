@@ -53,16 +53,22 @@ public class Pair extends SchemeObject {
 		if (car.equals(Symbol.ifSymbol)) {
 			//Anything that's not explicitly false is true
 			if (!pcdr().car.evaluate(env).equals(Boolean.FalseValue)) {
-				return EvaluationResult.makeUnfinished(pcdr().pcdr().car);
+				return EvaluationResult.makeUnfinished(pcdr().pcdr().car, env);
 			} else {
 				//If there is no "false" parameter, return false
 				if (pcdr().pcdr().cdr.equals(EmptyList.makeEmptyList())) {
 					return EvaluationResult.makeFinished(Boolean.FalseValue);
 				}
 				//Otherwise, we will evaluate that expression
-				return EvaluationResult.makeUnfinished(pcdr().pcdr().pcdr().car);
+				return EvaluationResult.makeUnfinished(pcdr().pcdr().pcdr().car, env);
 			}
 		}
+		
+		//Evaluate the lambda symbol
+		if (car.equals(Symbol.lambdaSymbol)) {
+			return EvaluationResult.makeFinished(
+					new CompoundProcedure(pcdr().car, pcdr().cdr));
+		}		
 		
 		//Evaluate procedure application
 		SchemeObject procedure = env.lookupValue(car);

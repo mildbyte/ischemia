@@ -14,6 +14,7 @@ public class Symbol extends SchemeObject {
 	public static Symbol defineSymbol = unsafeMakeSymbol("define");
 	public static Symbol okSymbol = unsafeMakeSymbol("ok");
 	public static Symbol ifSymbol = unsafeMakeSymbol("if");
+	public static Symbol lambdaSymbol = unsafeMakeSymbol("lambda");
 	
 	private Symbol(String value) {this.value = value;}
 	

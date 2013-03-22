@@ -9,6 +9,10 @@ public class Environment {
 		enclosingEnvironment = null;
 	}
 	
+	public Environment(Environment enclosingEnvironment, Frame frame) {
+		this.frame = frame;
+		this.enclosingEnvironment = enclosingEnvironment;
+	}
 	
 	/**
 	 * Looks up the value of a variable. If not found, tries the environment
