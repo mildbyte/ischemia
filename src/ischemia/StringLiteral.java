@@ -16,5 +16,9 @@ public class StringLiteral extends SchemeObject {
 
 	public String print() {
 		return "\"" + value + "\""; 
-	}	
+	}
+	
+	public boolean equals(SchemeObject s) {
+		return ((s instanceof StringLiteral) && ((StringLiteral)s).value.equals(value));
+	}
 }

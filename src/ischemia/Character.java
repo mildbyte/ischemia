@@ -15,6 +15,10 @@ public class Character extends SchemeObject {
 	
 	public Character(char value) {this.value = value;}
 	
+	public boolean equals(SchemeObject s) {
+		return (s instanceof Character) && value == ((Character)s).value;
+	}
+	
 	public EvaluationResult eval(Environment env) {
 		return EvaluationResult.makeFinished(this);
 	}

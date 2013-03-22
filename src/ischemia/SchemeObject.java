@@ -24,4 +24,6 @@ public abstract class SchemeObject {
 	 * Print the object
 	 */
 	public abstract String print();
+
+	public boolean equals(SchemeObject s) {return (s == this);}
 }

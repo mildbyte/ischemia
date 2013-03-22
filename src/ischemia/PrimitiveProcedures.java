@@ -8,6 +8,10 @@ public class PrimitiveProcedures {
 	private static SchemeObject pcar(SchemeObject p) {
 		return ((Pair)p).car();
 	}
+
+	private static SchemeObject pcdr(SchemeObject p) {
+		return ((Pair)p).cdr();
+	}
 	
 	//Basic number arithmetic
 	private static Procedure add = new Procedure() {
@@ -215,6 +219,58 @@ public class PrimitiveProcedures {
 		}
 	};
 	
+	//Procedures for working with pairs and lists
+	private static Procedure cons = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			return EvaluationResult.makeFinished(new Pair(pcar(args), pcar(pcdr(args))));
+		}
+	};
+	
+	private static Procedure car = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			return EvaluationResult.makeFinished(pcar(pcar(args)));
+		}
+	};
+
+	private static Procedure cdr = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			return EvaluationResult.makeFinished(pcdr(pcar(args)));
+		}
+	};
+	
+	private static Procedure setCar = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			((Pair)pcar(args)).setCar(pcar(pcdr(args)));
+			return EvaluationResult.makeFinished(Symbol.okSymbol);
+		}
+	};
+	
+	private static Procedure setCdr = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			((Pair)pcar(args)).setCdr(pcar(pcdr(args)));
+			return EvaluationResult.makeFinished(Symbol.okSymbol);
+		}
+	};
+	
+	private static Procedure list = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			return EvaluationResult.makeFinished(args);
+		}
+	};
+	
+	private static Procedure eq = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			return EvaluationResult.makeFinished(toBoolean(pcar(args).equals(pcar(pcdr(args)))));
+		}
+	};
+	
 	public static void installProcedures(Environment env) {
 		env.defineVariable(Symbol.unsafeMakeSymbol("null?"), isNull);
 		env.defineVariable(Symbol.unsafeMakeSymbol("boolean?"), isBoolean);
@@ -232,7 +288,6 @@ public class PrimitiveProcedures {
 		env.defineVariable(Symbol.unsafeMakeSymbol("symbol->string"), symbolToString);
 		env.defineVariable(Symbol.unsafeMakeSymbol("string->symbol"), stringToSymbol);
 		
-		
 		env.defineVariable(Symbol.unsafeMakeSymbol("+"), add);
 		env.defineVariable(Symbol.unsafeMakeSymbol("-"), subtract);
 		env.defineVariable(Symbol.unsafeMakeSymbol("*"), multiply);
@@ -241,6 +296,16 @@ public class PrimitiveProcedures {
 		env.defineVariable(Symbol.unsafeMakeSymbol("="), equals);
 		env.defineVariable(Symbol.unsafeMakeSymbol(">"), greater);
 		env.defineVariable(Symbol.unsafeMakeSymbol("<"), smaller);
+		
+		env.defineVariable(Symbol.unsafeMakeSymbol("cons"), cons);
+		env.defineVariable(Symbol.unsafeMakeSymbol("car"), car);
+		env.defineVariable(Symbol.unsafeMakeSymbol("cdr"), cdr);
+		env.defineVariable(Symbol.unsafeMakeSymbol("set-car!"), setCar);
+		env.defineVariable(Symbol.unsafeMakeSymbol("set-cdr!"), setCdr);
+		env.defineVariable(Symbol.unsafeMakeSymbol("list"), list);
+		
+		env.defineVariable(Symbol.unsafeMakeSymbol("eq?"), eq);
+		
 		
 	}
 }
