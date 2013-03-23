@@ -18,7 +18,11 @@ public class CompoundProcedure extends Procedure {
 		//visible
 		Environment evalEnv = new Environment(environment, new Frame(unboundArgs, args));
 		
-		//We are evaluating the first expression
+		//Since we wrapped the body of the procedure in a begin, we know there's only
+		//one element in the body.
+		return EvaluationResult.makeFinished(((Pair)body).car().evaluate(evalEnv));		
+		
+/*		//We are evaluating the first expression
 		SchemeObject exp = body;
 		
 		//While there exists a next expression..
@@ -29,7 +33,7 @@ public class CompoundProcedure extends Procedure {
 		}
 		
 		//Tail position, we can optimize it
-		return EvaluationResult.makeUnfinished(((Pair)exp).car(), evalEnv);
+		return EvaluationResult.makeUnfinished(((Pair)exp).car(), evalEnv);*/
 	}
 
 }
