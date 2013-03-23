@@ -6,8 +6,10 @@ public class CompoundProcedure extends Procedure {
 	private SchemeObject unboundArgs;
 	 
 	public CompoundProcedure(SchemeObject args, SchemeObject body) {
+		//Use the begin form defined previously to make sure that
+		//the body of the lambda is one expression only and avoid repeating the code.		
 		this.unboundArgs = args;
-		this.body = body;
+		this.body = new Pair(new Pair(Symbol.beginSymbol, body), EmptyList.makeEmptyList());
 	}
 	
 	//Evaluates the procedure in the given environment
@@ -21,19 +23,6 @@ public class CompoundProcedure extends Procedure {
 		//Since we wrapped the body of the procedure in a begin, we know there's only
 		//one element in the body.
 		return EvaluationResult.makeFinished(((Pair)body).car().evaluate(evalEnv));		
-		
-/*		//We are evaluating the first expression
-		SchemeObject exp = body;
-		
-		//While there exists a next expression..
-		while(!(((Pair)exp).cdr() instanceof EmptyList)) {
-			//Evaluate the expression and move on to the next one
-			((Pair)exp).car().evaluate(evalEnv);
-			exp = ((Pair)exp).cdr();
-		}
-		
-		//Tail position, we can optimize it
-		return EvaluationResult.makeUnfinished(((Pair)exp).car(), evalEnv);*/
 	}
 
 }

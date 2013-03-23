@@ -90,12 +90,10 @@ public class Pair extends SchemeObject {
 			return EvaluationResult.makeUnfinished(((Pair)exp).car(), env);
 		}
 		
-		//Evaluate the lambda symbol. Use the begin form defined previously to make sure that
-		//the body of the lambda is one expression only and avoid repeating the code.
+		//Evaluate the lambda symbol
 		if (car.equals(Symbol.lambdaSymbol)) {
 			return EvaluationResult.makeFinished(
-					new CompoundProcedure(pcdr().car, 
-							new Pair(new Pair(Symbol.beginSymbol, pcdr().cdr), EmptyList.makeEmptyList())));
+					new CompoundProcedure(pcdr().car, pcdr().cdr)); 
 		}
 		
 		//Evaluate procedure application
