@@ -1,8 +1,8 @@
 package ischemia;
 
 /**
- * Encapsulates a LISP pair and its evaluation
- *
+ * Encapsulates a LISP pair and its evaluation.
+ * Also is responsible for evaluating all special forms and procedures.
  */
 public class Pair extends SchemeObject {
 	private SchemeObject car;
@@ -45,7 +45,7 @@ public class Pair extends SchemeObject {
 		
 		//Define a variable or a procedure in the current environment, overwriting it if it exists.
 		if (car.equals(Symbol.defineSymbol)) {
-			if (pcdr() instanceof Pair) { //It's a procedure!
+			if (pcdr().car instanceof Pair) { //It's a procedure!
 				//The first element in the first argument is the name,
 				//the rest are the parameters
 				//the second argument is the procedure body
@@ -73,11 +73,28 @@ public class Pair extends SchemeObject {
 			}
 		}
 		
+		//Evaluate the begin symbol (sequence of events, same as evaluating
+		//a compound procedure)
+		if (car.equals(Symbol.beginSymbol)) {
+			//We are evaluating the first expression
+			SchemeObject exp = cdr;
+			
+			//While there exists a next expression..
+			while(!(((Pair)exp).cdr() instanceof EmptyList)) {
+				//Evaluate the expression and move on to the next one
+				((Pair)exp).car().evaluate(env);
+				exp = ((Pair)exp).cdr();
+			}
+			
+			//Tail position, we can optimize it
+			return EvaluationResult.makeUnfinished(((Pair)exp).car(), env);
+		}
+		
 		//Evaluate the lambda symbol
 		if (car.equals(Symbol.lambdaSymbol)) {
 			return EvaluationResult.makeFinished(
 					new CompoundProcedure(pcdr().car, pcdr().cdr));
-		}		
+		}
 		
 		//Evaluate procedure application
 		SchemeObject procedure = env.lookupValue(car);
