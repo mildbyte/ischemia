@@ -22,7 +22,7 @@ public class CompoundProcedure extends Procedure {
 		
 		//Since we wrapped the body of the procedure in a begin, we know there's only
 		//one element in the body.
-		return EvaluationResult.makeFinished(((Pair)body).car().evaluate(evalEnv));		
+		return EvaluationResult.makeUnfinished(((Pair)body).car(), evalEnv);		
 	}
 
 }
