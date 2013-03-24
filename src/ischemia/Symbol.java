@@ -22,6 +22,7 @@ public class Symbol extends SchemeObject {
 	public static Symbol andSymbol = unsafeMakeSymbol("and");
 	public static Symbol orSymbol = unsafeMakeSymbol("or");
 	public static Symbol applySymbol = unsafeMakeSymbol("apply");
+	public static Symbol evalSymbol = unsafeMakeSymbol("eval");
 	
 	private Symbol(String value) {this.value = value;}
 	
@@ -53,7 +54,7 @@ public class Symbol extends SchemeObject {
 		Symbol newSymbol = new Symbol(symbol);
 		symbolTable.put(symbol, newSymbol);
 		
-		return newSymbol;		
+		return newSymbol;
 	}
 	
 	public static Symbol makeSymbol(String symbol) throws ParseException {

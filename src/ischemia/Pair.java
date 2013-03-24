@@ -193,6 +193,12 @@ public class Pair extends SchemeObject {
 					new Pair(pcdr().car, prepareApplyArgs(evaluatedArgs)), env);
 		}
 		
+		//Evaluates the eval form
+		if (car.equals(Symbol.evalSymbol)) {
+			Environment evalEnv = (Environment)env.lookupValue(pcdr().pcdr().car);
+			return EvaluationResult.makeUnfinished(pcdr().car.evaluate(env), evalEnv);
+		}
+		
 		//Evaluate procedure application
 		SchemeObject procedure = env.lookupValue(car);
 		
