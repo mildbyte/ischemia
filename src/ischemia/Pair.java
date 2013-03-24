@@ -137,6 +137,44 @@ public class Pair extends SchemeObject {
 					new CompoundProcedure(pcdr().car, pcdr().cdr)); 
 		}
 		
+		//Evaluate the and symbol (short-circuiting, does not evaluate the rest of the conditions
+		//if we already know the result).
+		if (car.equals(Symbol.andSymbol)) {
+			SchemeObject currList = cdr;
+			
+			while (!(currList instanceof EmptyList)) {
+				//If one of the conditions is false, return false
+				if (((Pair)currList).car.evaluate(env).equals(Boolean.FalseValue)) {
+					return EvaluationResult.makeFinished(Boolean.FalseValue);
+				}
+				
+				//Advance to the next condition
+				currList = ((Pair)currList).cdr;
+			}
+			
+			//Reached the end with all conditions true, return true.
+			//(or should it be the result of the last condition?)
+			return EvaluationResult.makeFinished(Boolean.TrueValue);
+		}
+		
+		//Evaluate the or symbol (same as and, but with false and true swapped).
+		if (car.equals(Symbol.orSymbol)) {
+			SchemeObject currList = cdr;
+			
+			while (!(currList instanceof EmptyList)) {
+				//If one of the conditions is true, return true
+				if (!((Pair)currList).car.evaluate(env).equals(Boolean.FalseValue)) {
+					return EvaluationResult.makeFinished(Boolean.TrueValue);
+				}
+				
+				//Advance to the next condition
+				currList = ((Pair)currList).cdr;
+			}
+			
+			//Reached the end with all conditions false, return false.
+			return EvaluationResult.makeFinished(Boolean.FalseValue);
+		}		
+		
 		//Evaluate procedure application
 		SchemeObject procedure = env.lookupValue(car);
 		

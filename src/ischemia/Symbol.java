@@ -19,6 +19,8 @@ public class Symbol extends SchemeObject {
 	public static Symbol condSymbol = unsafeMakeSymbol("cond");
 	public static Symbol elseSymbol = unsafeMakeSymbol("else");
 	public static Symbol letSymbol = unsafeMakeSymbol("let");
+	public static Symbol andSymbol = unsafeMakeSymbol("and");
+	public static Symbol orSymbol = unsafeMakeSymbol("or");
 	
 	private Symbol(String value) {this.value = value;}
 	
