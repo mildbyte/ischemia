@@ -17,33 +17,47 @@ public class PrimitiveProcedures {
 	private static Procedure add = new Procedure() {
 		public EvaluationResult evalProcedure(Environment environment,
 				SchemeObject args) throws EvalException {
-			Pair pargs = (Pair)args;
+			int result = 0;
 			
-			return EvaluationResult.makeFinished(
-					new Fixnum(((Fixnum)pargs.car()).getNumber() +
-					((Fixnum)((Pair)(pargs.cdr())).car()).getNumber()));
+			//Add all the numbers in the list
+			while (!(args instanceof EmptyList)) {
+				result += ((Fixnum)((Pair)args).car()).getNumber();
+				args = ((Pair)args).cdr();
+			}
+			
+			return EvaluationResult.makeFinished(new Fixnum(result));
 		}
 	};
 
 	private static Procedure subtract = new Procedure() {
 		public EvaluationResult evalProcedure(Environment environment,
 				SchemeObject args) throws EvalException {
-			Pair pargs = (Pair)args;
+			int result = ((Fixnum)((Pair)args).car()).getNumber();
+			args = ((Pair)args).cdr();
 			
-			return EvaluationResult.makeFinished(
-					new Fixnum(((Fixnum)pargs.car()).getNumber() -
-					((Fixnum)((Pair)(pargs.cdr())).car()).getNumber()));
+			//Subtract all the numbers in the list from the first number
+			while (!(args instanceof EmptyList)) {
+				result -= ((Fixnum)((Pair)args).car()).getNumber();
+				args = ((Pair)args).cdr();
+			}
+			
+			return EvaluationResult.makeFinished(new Fixnum(result));
 		}
 	};
 
 	private static Procedure multiply = new Procedure() {
 		public EvaluationResult evalProcedure(Environment environment,
 				SchemeObject args) throws EvalException {
-			Pair pargs = (Pair)args;
+			//As a side effect, calling (*) returns 1.			
+			int result = 1;
 			
-			return EvaluationResult.makeFinished(
-					new Fixnum(((Fixnum)pargs.car()).getNumber() *
-					((Fixnum)((Pair)(pargs.cdr())).car()).getNumber()));
+			//Multiply all the numbers in the list
+			while (!(args instanceof EmptyList)) {
+				result *= ((Fixnum)((Pair)args).car()).getNumber();
+				args = ((Pair)args).cdr();
+			}
+			
+			return EvaluationResult.makeFinished(new Fixnum(result));
 		}
 	};
 	
@@ -72,33 +86,49 @@ public class PrimitiveProcedures {
 	private static Procedure equals = new Procedure() {
 		public EvaluationResult evalProcedure(Environment environment,
 				SchemeObject args) throws EvalException {
-			Pair pargs = (Pair)args;
+			//If any two values are not equal to each other, return false
+			while (!(((Pair)((Pair)args)).cdr() instanceof EmptyList)) {
+				//oh god the brackets...
+				if (!(((Fixnum)(((Pair)args).car())).getNumber()
+						 == ((Fixnum)(((Pair)((Pair)args).cdr()).car())).getNumber())) {
+					return EvaluationResult.makeFinished(Boolean.FalseValue);
+				}
+				args = ((Pair)args).cdr();
+			}
 			
-			return EvaluationResult.makeFinished(
-					toBoolean(((Fixnum)pargs.car()).getNumber() ==
-					((Fixnum)((Pair)(pargs.cdr())).car()).getNumber()));
+			return EvaluationResult.makeFinished(Boolean.TrueValue);
 		}
 	};	
 	
 	private static Procedure greater = new Procedure() {
 		public EvaluationResult evalProcedure(Environment environment,
 				SchemeObject args) throws EvalException {
-			Pair pargs = (Pair)args;
+			//If a value is not greater than the one before it, return false
+			while (!(((Pair)((Pair)args)).cdr() instanceof EmptyList)) {
+				if (!(((Fixnum)(((Pair)args).car())).getNumber()
+						 > ((Fixnum)(((Pair)((Pair)args).cdr()).car())).getNumber())) {
+					return EvaluationResult.makeFinished(Boolean.FalseValue);
+				}
+				args = ((Pair)args).cdr();
+			}
 			
-			return EvaluationResult.makeFinished(
-					toBoolean(((Fixnum)pargs.car()).getNumber() >
-					((Fixnum)((Pair)(pargs.cdr())).car()).getNumber()));
+			return EvaluationResult.makeFinished(Boolean.TrueValue);
 		}
 	};	
 	
 	private static Procedure smaller = new Procedure() {
 		public EvaluationResult evalProcedure(Environment environment,
 				SchemeObject args) throws EvalException {
-			Pair pargs = (Pair)args;
+			//If a value is not smaller than the one before it, return false
+			while (!(((Pair)((Pair)args)).cdr() instanceof EmptyList)) {
+				if (!(((Fixnum)(((Pair)args).car())).getNumber()
+						 < ((Fixnum)(((Pair)((Pair)args).cdr()).car())).getNumber())) {
+					return EvaluationResult.makeFinished(Boolean.FalseValue);
+				}
+				args = ((Pair)args).cdr();
+			}
 			
-			return EvaluationResult.makeFinished(
-					toBoolean(((Fixnum)pargs.car()).getNumber() <
-					((Fixnum)((Pair)(pargs.cdr())).car()).getNumber()));
+			return EvaluationResult.makeFinished(Boolean.TrueValue);
 		}
 	};	
 	
