@@ -1,8 +1,10 @@
 package ischemia;
 
-public class Environment {
+public class Environment extends SchemeObject {
 	private Frame frame;
 	private Environment enclosingEnvironment;
+	
+	private static Environment globalEnvironment;
 	
 	public Environment() {
 		frame = new Frame();
@@ -17,6 +19,27 @@ public class Environment {
 	public Environment(Environment enclosingEnvironment) {
 		frame = new Frame();
 		this.enclosingEnvironment = enclosingEnvironment;
+	}
+	
+	/**
+	 * Returns the environment with only primitive procedures defined.
+	 */
+	public static Environment getInitialEnvironment() {
+		Environment env = new Environment();
+		PrimitiveProcedures.installProcedures(env);
+		
+		return env;
+	}
+	
+	/**
+	 * A singleton, returns the top-level environment of the REPL.
+	 */
+	public static Environment getGlobalEnvironment() {
+		if (globalEnvironment == null) {
+			globalEnvironment = getInitialEnvironment();
+		}
+		
+		return globalEnvironment;
 	}
 	
 	/**
@@ -36,7 +59,6 @@ public class Environment {
 		return value;
 	}
 	
-	
 	/**
 	 * Sets the value of a variable in this environment, tries the enclosing environment
 	 * if it fails. Throws an exception if the variable isn't anywhere.
@@ -53,11 +75,23 @@ public class Environment {
 		}
 	}
 	
-	
 	/**
 	 * Defines the variable in this frame no matter whether it exists or not.
 	 */
 	public void defineVariable(SchemeObject variable, SchemeObject value) {
 		frame.defineVariable(variable, value);
+	}
+
+	protected EvaluationResult eval(Environment environment)
+			throws EvalException {
+		throw new EvalException("Cannot evaluate an environment!");
+	}
+	
+	/**
+	 * Really should print the contents of the current environment and all
+	 * enclosing as a LISP list, but it is stored as a HashMap here..
+	 */
+	public String print() {
+		return frame.printAll();
 	}
 }

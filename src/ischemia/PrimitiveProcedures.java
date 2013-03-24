@@ -301,6 +301,26 @@ public class PrimitiveProcedures {
 		}
 	};
 	
+	private static Procedure interEnv = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			return EvaluationResult.makeFinished(Environment.getGlobalEnvironment());
+		}
+	};
+	
+	private static Procedure nullEnv = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			return EvaluationResult.makeFinished(new Environment());
+		}
+	};
+	
+	private static Procedure initialEnv = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			return EvaluationResult.makeFinished(Environment.getInitialEnvironment());
+		}
+	};
 	public static void installProcedures(Environment env) {
 		env.defineVariable(Symbol.unsafeMakeSymbol("null?"), isNull);
 		env.defineVariable(Symbol.unsafeMakeSymbol("boolean?"), isBoolean);
@@ -335,5 +355,9 @@ public class PrimitiveProcedures {
 		env.defineVariable(Symbol.unsafeMakeSymbol("list"), list);
 		
 		env.defineVariable(Symbol.unsafeMakeSymbol("eq?"), eq);
+		
+		env.defineVariable(Symbol.unsafeMakeSymbol("interaction-environment"), interEnv);
+		env.defineVariable(Symbol.unsafeMakeSymbol("null-environment"), nullEnv);
+		env.defineVariable(Symbol.unsafeMakeSymbol("environment"), initialEnv);
 	}
 }

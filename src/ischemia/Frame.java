@@ -46,4 +46,17 @@ public class Frame {
 		
 		defineVariable(variable, value);
 	}
+	
+	/**
+	 * Prints all variables bound in the frame
+	 * @return
+	 */
+	public String printAll() {
+		String result = "";
+		for (SchemeObject variable : mappings.keySet()) {
+			result += variable.print() + " ";
+		}
+		
+		return result;
+	}
 }
