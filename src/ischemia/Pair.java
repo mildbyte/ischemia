@@ -93,6 +93,27 @@ public class Pair extends SchemeObject {
 			return EvaluationResult.makeFinished(Boolean.FalseValue);
 		}
 		
+		//Evaluate the let form by extending the environment to contain
+		//the new bindings and then evaluating the body of the let in the environment.
+		if (car.equals(Symbol.letSymbol)) {
+			Environment evalEnv = new Environment(env);
+			
+			//Zipped list of variables and their values
+			SchemeObject varValues = pcdr().car;
+			while (!(varValues instanceof EmptyList)) {
+				Pair currPair = (Pair)((Pair)varValues).car();
+				//If we evaluate the variable in the environment currently being created (evalEnv), we
+				//get the code for the let* form.
+				evalEnv.defineVariable(currPair.car(), ((Pair)(currPair.cdr())).car().evaluate(env));
+				
+				//Advance to the next binding
+				varValues = ((Pair)varValues).cdr;
+			}
+			
+			//Evaluate the expression in the resultant environment
+			return EvaluationResult.makeUnfinished(pcdr().pcdr().car, evalEnv);
+		}
+		
 		//Evaluate the begin symbol (sequence of events, same as evaluating
 		//a compound procedure)
 		if (car.equals(Symbol.beginSymbol)) {

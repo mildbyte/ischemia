@@ -18,6 +18,7 @@ public class Symbol extends SchemeObject {
 	public static Symbol beginSymbol = unsafeMakeSymbol("begin");
 	public static Symbol condSymbol = unsafeMakeSymbol("cond");
 	public static Symbol elseSymbol = unsafeMakeSymbol("else");
+	public static Symbol letSymbol = unsafeMakeSymbol("let");
 	
 	private Symbol(String value) {this.value = value;}
 	

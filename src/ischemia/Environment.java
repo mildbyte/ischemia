@@ -14,6 +14,11 @@ public class Environment {
 		this.enclosingEnvironment = enclosingEnvironment;
 	}
 	
+	public Environment(Environment enclosingEnvironment) {
+		frame = new Frame();
+		this.enclosingEnvironment = enclosingEnvironment;
+	}
+	
 	/**
 	 * Looks up the value of a variable. If not found, tries the environment
 	 * above it. Throws an exception if lookup fails completely.
