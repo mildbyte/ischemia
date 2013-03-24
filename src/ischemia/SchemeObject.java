@@ -10,6 +10,7 @@ public abstract class SchemeObject {
 	/**
 	 * Evaluate the object until it no longer needs to be evaluated
 	 * (tail-call optimization)
+	 * (oh crap, I've just invented a trampoline)
 	 */
 	public final SchemeObject evaluate(Environment environment) throws EvalException {
 		EvaluationResult evalResult = this.eval(environment);
