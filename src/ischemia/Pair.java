@@ -73,6 +73,26 @@ public class Pair extends SchemeObject {
 			}
 		}
 		
+		//Evaluate the cond form. We could convert it into a series of nested ifs,
+		//but this method is more efficient.
+		if (car.equals(Symbol.condSymbol)) {
+			//Pointer to the list of remaining possibilities
+			Pair currExpr = pcdr();
+			
+			while (!(currExpr.car instanceof EmptyList)) {
+				//If we have reached the else clause or a true condition, return the result
+				if (currExpr.pcar().car.equals(Symbol.elseSymbol)
+					|| !currExpr.pcar().car.evaluate(env).equals(Boolean.FalseValue)) {
+					return EvaluationResult.makeUnfinished(currExpr.pcar().pcdr().car, env);
+				}
+				
+				//Advance the pointer
+				currExpr = currExpr.pcdr();
+			}
+			//Reached the end, return a false constant (like in the (if), is this valid?)
+			return EvaluationResult.makeFinished(Boolean.FalseValue);
+		}
+		
 		//Evaluate the begin symbol (sequence of events, same as evaluating
 		//a compound procedure)
 		if (car.equals(Symbol.beginSymbol)) {
