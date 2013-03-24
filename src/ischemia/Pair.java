@@ -31,6 +31,15 @@ public class Pair extends SchemeObject {
 		return new Pair(((Pair)obj).car().evaluate(env), evalAll(env, ((Pair)obj).cdr()));
 	}
 	
+	/**
+	 * Prepares the arguments to pass to the procedure called by apply (merges all of them into one list)
+	 */
+	private static SchemeObject prepareApplyArgs(SchemeObject args) {
+		if (((Pair)args).cdr instanceof EmptyList) return ((Pair)args).car;
+		
+		return new Pair(((Pair)args).car, prepareApplyArgs(((Pair)args).cdr));		
+	}
+	
 	public EvaluationResult eval(Environment env) throws EvalException {
 		//Unquote quoted lists when evaluating
 		if (car.equals(Symbol.quoteSymbol)) {
@@ -173,7 +182,16 @@ public class Pair extends SchemeObject {
 			
 			//Reached the end with all conditions false, return false.
 			return EvaluationResult.makeFinished(Boolean.FalseValue);
-		}		
+		}
+		
+		//The apply form: apply the second element to the arguments formed by the list
+		//in the third element (or the rest of the arguments to apply + the list in the last position)
+		if (car.equals(Symbol.applySymbol)) {
+			SchemeObject evaluatedArgs = evalAll(env, pcdr().pcdr());
+
+			return EvaluationResult.makeUnfinished(
+					new Pair(pcdr().car, prepareApplyArgs(evaluatedArgs)), env);
+		}
 		
 		//Evaluate procedure application
 		SchemeObject procedure = env.lookupValue(car);

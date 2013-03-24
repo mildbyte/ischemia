@@ -305,7 +305,5 @@ public class PrimitiveProcedures {
 		env.defineVariable(Symbol.unsafeMakeSymbol("list"), list);
 		
 		env.defineVariable(Symbol.unsafeMakeSymbol("eq?"), eq);
-		
-		
 	}
 }
