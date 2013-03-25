@@ -17,6 +17,7 @@ public class Ischemia {
 
 			try {
 				SchemeObject object = SchemeReader.read(in);
+				if (object == null) return;
 				System.out.print(object.evaluate(Environment.getGlobalEnvironment()).print());
 				System.out.println();
 			} catch (ParseException e) {

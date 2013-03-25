@@ -19,7 +19,7 @@ public class SchemeReader {
 	/**
 	 * Returns one character from the reader without advancing it.
 	 */
-	private static char peek(BufferedReader reader) throws IOException {
+	private static int peek(BufferedReader reader) throws IOException {
 		reader.mark(1);
 		char result = (char)reader.read();
 		reader.reset();
@@ -69,7 +69,11 @@ public class SchemeReader {
 	 */
 	private static SchemeObject readPair(BufferedReader reader) throws ParseException,IOException {
 		skipWhitespace(reader);
-		char current = peek(reader);
+		
+		int readChar = peek(reader);
+		if (readChar == -1) return null;
+		
+		char current = (char)readChar;
 		
 		//If we see a closing bracket, we've reached the end of the list
 		//(the empty list will be consed to the previous pair)
@@ -82,11 +86,11 @@ public class SchemeReader {
 		SchemeObject car = read(reader);
 		
 		skipWhitespace(reader);
-		current = peek(reader);		
+		current = (char)peek(reader);		
 		
 		if (current == '.') { //Dotted pair
 			current = (char)reader.read();
-			current = peek(reader);
+			current = (char)peek(reader);
 			if (!isDelimiter(current)) {
 				throw new ParseException("Dot not followed by a delimiter!");
 			}
@@ -119,7 +123,12 @@ public class SchemeReader {
 		char current;
 		try {
 			skipWhitespace(reader);
-			current = (char)reader.read();
+			int readChar = reader.read();
+			if (readChar == -1) {//EOF
+				return null;
+			}
+			
+			current = (char)readChar;
 			
 			//Found a string with escape characters
 			if (current == '"') {

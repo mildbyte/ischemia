@@ -23,6 +23,7 @@ public class Symbol extends SchemeObject {
 	public static Symbol orSymbol = unsafeMakeSymbol("or");
 	public static Symbol applySymbol = unsafeMakeSymbol("apply");
 	public static Symbol evalSymbol = unsafeMakeSymbol("eval");
+	public static Symbol loadedSymbol = unsafeMakeSymbol("program-loaded");
 	
 	private Symbol(String value) {this.value = value;}
 	

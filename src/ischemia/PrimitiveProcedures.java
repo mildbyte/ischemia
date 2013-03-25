@@ -1,5 +1,11 @@
 package ischemia;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+
 public class PrimitiveProcedures {
 	private static Boolean toBoolean(boolean a) {
 		return a? Boolean.TrueValue : Boolean.FalseValue;
@@ -321,6 +327,45 @@ public class PrimitiveProcedures {
 			return EvaluationResult.makeFinished(Environment.getInitialEnvironment());
 		}
 	};
+	
+	private static Procedure load = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			//Load the Scheme code in the file into the REPL.
+			String pathname = ((StringLiteral)((Pair)args).car()).getValue();
+			
+			BufferedReader fileReader;
+			try {
+				fileReader = new BufferedReader(new FileReader(new File(pathname)));
+			} catch (IOException e) {
+				throw new EvalException("Error: cannot open the file!");
+			}
+			
+			try {
+				do {
+					//This is due to BufferedReader not supporting a proper end-of-file operation.
+					fileReader.mark(1);
+					int currChar = fileReader.read();
+					if (currChar == -1) break;
+					fileReader.reset();
+					
+					//Read a SchemeObject from the file and evaluate it.
+					try {
+						SchemeObject newObject = SchemeReader.read(fileReader);
+						if (newObject == null) break;
+						newObject.evaluate(environment);
+					} catch (ParseException e) {
+						throw new EvalException("Error while parsing the file!");
+					}
+				} while (true);
+			} catch (IOException e) {
+				throw new EvalException("Error while reading the file!");
+			}
+			
+			return EvaluationResult.makeFinished(Symbol.loadedSymbol);
+		}
+	};
+	
 	public static void installProcedures(Environment env) {
 		env.defineVariable(Symbol.unsafeMakeSymbol("null?"), isNull);
 		env.defineVariable(Symbol.unsafeMakeSymbol("boolean?"), isBoolean);
@@ -359,5 +404,7 @@ public class PrimitiveProcedures {
 		env.defineVariable(Symbol.unsafeMakeSymbol("interaction-environment"), interEnv);
 		env.defineVariable(Symbol.unsafeMakeSymbol("null-environment"), nullEnv);
 		env.defineVariable(Symbol.unsafeMakeSymbol("environment"), initialEnv);
+		
+		env.defineVariable(Symbol.unsafeMakeSymbol("load"), load);
 	}
 }
