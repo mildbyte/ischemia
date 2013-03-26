@@ -1,13 +1,5 @@
 package ischemia;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-
-import com.sun.corba.se.spi.ior.MakeImmutable;
-
 public class PrimitiveProcedures {
 	private static Boolean toBoolean(boolean a) {
 		return a? Boolean.TrueValue : Boolean.FalseValue;
