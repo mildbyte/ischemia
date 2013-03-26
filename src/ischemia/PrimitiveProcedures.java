@@ -410,8 +410,69 @@ public class PrimitiveProcedures {
 					toBoolean(pcar(args) instanceof EOFObject));
 		}
 	};
-
 	
+	/**
+	 * Returns either the output port or the stdout (if there is only one argument)
+	 */
+	
+	private static OutputPort getOutputPortFromArgs(SchemeObject args) {
+		if (pcdr(args) instanceof EmptyList) return OutputPort.getStdout();
+		
+		return (OutputPort)pcar(pcdr(args));
+	}
+	
+	private static Procedure write = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			getOutputPortFromArgs(args).write(pcar(args));
+			return EvaluationResult.makeFinished(Symbol.okSymbol);
+		}
+	};
+
+	private static Procedure writeChar = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			getOutputPortFromArgs(args).writeChar(((Character)pcar(args)).getValue());
+			return EvaluationResult.makeFinished(Symbol.okSymbol);
+		}
+	};
+
+	private static Procedure isOutputPort = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			return EvaluationResult.makeFinished(
+					toBoolean((((Pair)args).car()) instanceof OutputPort));
+		}
+	};
+	
+	private static Procedure openOutputPort = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			StringLiteral path = (StringLiteral)pcar(args);
+			return EvaluationResult.makeFinished(new OutputPort(path.getValue()));
+		}
+	};
+	
+	private static Procedure closeOutputPort = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			((OutputPort)pcar(args)).closeFile();
+			
+			return EvaluationResult.makeFinished(Symbol.okSymbol);
+		}
+	};
+	
+	private static Procedure error = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			while (!(args instanceof EmptyList)) {
+				write.evalProcedure(environment, new Pair(pcar(args), EmptyList.makeEmptyList()));
+				args = pcdr(args);
+			}
+			
+			return EvaluationResult.makeFinished(Symbol.exitingSymbol);
+		}
+	};
 	
 	public static void installProcedures(Environment env) {
 		env.defineVariable(Symbol.unsafeMakeSymbol("null?"), isNull);

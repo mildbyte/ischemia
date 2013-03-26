@@ -18,8 +18,12 @@ public class Ischemia {
 			try {
 				SchemeObject object = SchemeReader.read(in);
 				if (object == null) return;
-				System.out.print(object.evaluate(Environment.getGlobalEnvironment()).print());
+				SchemeObject evaluated = object.evaluate(Environment.getGlobalEnvironment());
+				System.out.print(evaluated.print());
 				System.out.println();
+				
+				//If an error was returned, exit the REPL.
+				if (evaluated.equals(Symbol.exitingSymbol)) return;
 			} catch (ParseException e) {
 			 	System.out.println(e.getMessage());
 			} catch (EvalException e) {
