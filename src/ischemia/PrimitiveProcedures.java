@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 
+import com.sun.corba.se.spi.ior.MakeImmutable;
+
 public class PrimitiveProcedures {
 	private static Boolean toBoolean(boolean a) {
 		return a? Boolean.TrueValue : Boolean.FalseValue;
@@ -346,6 +348,66 @@ public class PrimitiveProcedures {
 		}
 	};
 	
+	private static Procedure read = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			InputPort inputPort = (InputPort)((Pair)args).car();
+			
+			return EvaluationResult.makeFinished(inputPort.read());
+		}
+	};
+	
+	private static Procedure readChar = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			InputPort inputPort = (InputPort)((Pair)args).car();
+			
+			return EvaluationResult.makeFinished(inputPort.readChar());
+		}
+	};	
+	
+	private static Procedure peekChar = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			InputPort inputPort = (InputPort)((Pair)args).car();
+			
+			return EvaluationResult.makeFinished(inputPort.peekChar());
+		}
+	};
+	
+	private static Procedure isInputPort = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			return EvaluationResult.makeFinished(
+					toBoolean((((Pair)args).car()) instanceof InputPort));
+		}
+	};
+	
+	private static Procedure openInputPort = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			StringLiteral path = (StringLiteral)pcar(args);
+			return EvaluationResult.makeFinished(new InputPort(path.getValue()));
+		}
+	};
+	
+	private static Procedure closeInputPort = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			((InputPort)pcar(args)).closeFile();
+			
+			return EvaluationResult.makeFinished(Symbol.okSymbol);
+		}
+	};
+	
+	private static Procedure isEOFObject = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			return EvaluationResult.makeFinished(
+					toBoolean(pcar(args) instanceof EOFObject));
+		}
+	};
+	
 	public static void installProcedures(Environment env) {
 		env.defineVariable(Symbol.unsafeMakeSymbol("null?"), isNull);
 		env.defineVariable(Symbol.unsafeMakeSymbol("boolean?"), isBoolean);
@@ -386,5 +448,12 @@ public class PrimitiveProcedures {
 		env.defineVariable(Symbol.unsafeMakeSymbol("environment"), initialEnv);
 		
 		env.defineVariable(Symbol.unsafeMakeSymbol("load"), load);
+		env.defineVariable(Symbol.unsafeMakeSymbol("read"), read);
+		env.defineVariable(Symbol.unsafeMakeSymbol("read-char"), readChar);
+		env.defineVariable(Symbol.unsafeMakeSymbol("peek-char"), peekChar);
+		env.defineVariable(Symbol.unsafeMakeSymbol("input-port?"), isInputPort);
+		env.defineVariable(Symbol.unsafeMakeSymbol("open-input-file"), openInputPort);
+		env.defineVariable(Symbol.unsafeMakeSymbol("close-input-file"), closeInputPort);
+		env.defineVariable(Symbol.unsafeMakeSymbol("eof-object?"), isEOFObject);
 	}
 }
