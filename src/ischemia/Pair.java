@@ -119,8 +119,20 @@ public class Pair extends SchemeObject {
 				varValues = ((Pair)varValues).cdr;
 			}
 			
+			//Don't forget to wrap the body of the let binding into a begin block.
+			//Otherwise, only the first statement is executed.
+			//This is why the metacircular evaluator didn't work: it used a let binding for
+			//setting up the environment that had a define block and then returned the
+			//resultant environment. The environment turned out to be the 'ok symbol, which
+			//was detrimental to the execution and made me spend an hour refactoring my
+			//HashMap-backed implementation of the environment code into a list-based,
+			//thinking that the list representation was what the metacircular evaluator
+			//relied upon.
+			
+			SchemeObject bodyWrap = new Pair(Symbol.beginSymbol, pcdr().pcdr());
+			
 			//Evaluate the expression in the resultant environment
-			return EvaluationResult.makeUnfinished(pcdr().pcdr().car, evalEnv);
+			return EvaluationResult.makeUnfinished(bodyWrap, evalEnv);
 		}
 		
 		//Evaluate the begin symbol (sequence of events, same as evaluating
@@ -191,24 +203,25 @@ public class Pair extends SchemeObject {
 			throw new EvalException("Unknown procedure!");
 		}
 		
-		//Special forms first: their arguments can't be evaluated.
+		SchemeObject evaluatedArgs = evalAll(env, cdr);
+		
+		//Special forms
+		
+		//Eval: evaluate the argument in the given environment
+		if (procedure.equals(PrimitiveProcedures.eval)) { 
+			//Retrieve the environment from the arguments
+			Environment evalEnv = (Environment)pcdr().pcdr().car.evaluate(env);
+			return EvaluationResult.makeUnfinished(pcdr().car.evaluate(env), evalEnv);
+		}				
 		
 		//The apply form: apply the second element to the arguments formed by the list
 		//in the third element (or the rest of the arguments to apply + the list in the last position)
 		if (procedure.equals(PrimitiveProcedures.apply)) {
-			SchemeObject evaluatedArgs = evalAll(env, pcdr().pcdr());
-
-			return EvaluationResult.makeUnfinished(
-					new Pair(pcdr().car, prepareApplyArgs(evaluatedArgs)), env);
+			procedure = ((Pair)evaluatedArgs).car;
+			evaluatedArgs = prepareApplyArgs(((Pair)evaluatedArgs).cdr);
 		}
 		
-		//Evaluates the eval form
-		if (procedure.equals(PrimitiveProcedures.eval)) {
-			Environment evalEnv = (Environment)pcdr().pcdr().car.evaluate(env);
-			return EvaluationResult.makeUnfinished(pcdr().car.evaluate(env), evalEnv);
-		}		
-		
-		return ((Procedure)procedure).evalProcedure(env, evalAll(env, cdr));
+		return ((Procedure)procedure).evalProcedure(env, evaluatedArgs);
 	}
 	
 	public String printPair() {
