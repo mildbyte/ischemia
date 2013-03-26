@@ -3,10 +3,24 @@ package ischemia;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class InputPort extends SchemeObject {
 	private String filename;
 	private BufferedReader fileReader;
+	
+	private static InputPort stdin;
+	
+	public static InputPort getStdin() {
+		if (stdin == null) {
+			stdin = new InputPort();
+			stdin.fileReader = new BufferedReader(new InputStreamReader(System.in));
+		}
+		
+		return stdin;
+	}
+	
+	private InputPort() {}
 	
 	protected EvaluationResult eval(Environment environment)
 			throws EvalException {

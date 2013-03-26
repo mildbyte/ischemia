@@ -348,30 +348,33 @@ public class PrimitiveProcedures {
 		}
 	};
 	
+	/**
+	 * Returns the port from the arguments or stdin if there are none.
+	 */
+	private static InputPort getInputPortFromArgs(SchemeObject args) {
+		if (args instanceof EmptyList) return InputPort.getStdin();
+		
+		return (InputPort)pcar(args);
+	}
+	
 	private static Procedure read = new Procedure() {
 		public EvaluationResult evalProcedure(Environment environment,
 				SchemeObject args) throws EvalException {
-			InputPort inputPort = (InputPort)((Pair)args).car();
-			
-			return EvaluationResult.makeFinished(inputPort.read());
+			return EvaluationResult.makeFinished(getInputPortFromArgs(args).read());
 		}
 	};
 	
 	private static Procedure readChar = new Procedure() {
 		public EvaluationResult evalProcedure(Environment environment,
 				SchemeObject args) throws EvalException {
-			InputPort inputPort = (InputPort)((Pair)args).car();
-			
-			return EvaluationResult.makeFinished(inputPort.readChar());
+			return EvaluationResult.makeFinished(getInputPortFromArgs(args).readChar());
 		}
 	};	
 	
 	private static Procedure peekChar = new Procedure() {
 		public EvaluationResult evalProcedure(Environment environment,
 				SchemeObject args) throws EvalException {
-			InputPort inputPort = (InputPort)((Pair)args).car();
-			
-			return EvaluationResult.makeFinished(inputPort.peekChar());
+			return EvaluationResult.makeFinished(getInputPortFromArgs(args).peekChar());
 		}
 	};
 	
@@ -407,6 +410,8 @@ public class PrimitiveProcedures {
 					toBoolean(pcar(args) instanceof EOFObject));
 		}
 	};
+
+	
 	
 	public static void installProcedures(Environment env) {
 		env.defineVariable(Symbol.unsafeMakeSymbol("null?"), isNull);
@@ -455,5 +460,12 @@ public class PrimitiveProcedures {
 		env.defineVariable(Symbol.unsafeMakeSymbol("open-input-file"), openInputPort);
 		env.defineVariable(Symbol.unsafeMakeSymbol("close-input-file"), closeInputPort);
 		env.defineVariable(Symbol.unsafeMakeSymbol("eof-object?"), isEOFObject);
+		
+		env.defineVariable(Symbol.unsafeMakeSymbol("write"), write);
+		env.defineVariable(Symbol.unsafeMakeSymbol("write-char"), writeChar);
+		env.defineVariable(Symbol.unsafeMakeSymbol("output-port?"), isOutputPort);
+		env.defineVariable(Symbol.unsafeMakeSymbol("open-output-file"), openOutputPort); 
+		env.defineVariable(Symbol.unsafeMakeSymbol("close-output-file"), closeOutputPort);
+		env.defineVariable(Symbol.unsafeMakeSymbol("error"), error);
 	}
 }
