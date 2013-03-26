@@ -35,6 +35,13 @@ public class SchemeReader {
 		while (true) {
 			reader.mark(1);
 			current = (char)reader.read();
+			
+			//Lines beginning with ; are ignored (comments)
+			if (current == ';') {
+				reader.readLine();
+				continue;
+			}
+			
 			if (!isDelimiter(current)) {
 				reader.reset();
 				return;
