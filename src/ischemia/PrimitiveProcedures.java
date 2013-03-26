@@ -334,35 +334,15 @@ public class PrimitiveProcedures {
 			//Load the Scheme code in the file into the REPL.
 			String pathname = ((StringLiteral)((Pair)args).car()).getValue();
 			
-			BufferedReader fileReader;
-			try {
-				fileReader = new BufferedReader(new FileReader(new File(pathname)));
-			} catch (IOException e) {
-				throw new EvalException("Error: cannot open the file!");
-			}
+			InputPort inputPort = new InputPort(pathname);
 			
-			try {
-				do {
-					//This is due to BufferedReader not supporting a proper end-of-file operation.
-					fileReader.mark(1);
-					int currChar = fileReader.read();
-					if (currChar == -1) break;
-					fileReader.reset();
-					
-					//Read a SchemeObject from the file and evaluate it.
-					try {
-						SchemeObject newObject = SchemeReader.read(fileReader);
-						if (newObject == null) break;
-						newObject.evaluate(environment);
-					} catch (ParseException e) {
-						throw new EvalException("Error while parsing the file!");
-					}
-				} while (true);
-			} catch (IOException e) {
-				throw new EvalException("Error while reading the file!");
+			//Read an object, stop if reached the end of file, evaluate the object.
+			while(true) {
+				SchemeObject readObject = inputPort.read();
+				if (readObject instanceof EOFObject) 
+					return EvaluationResult.makeFinished(Symbol.loadedSymbol);
+				readObject.evaluate(environment);
 			}
-			
-			return EvaluationResult.makeFinished(Symbol.loadedSymbol);
 		}
 	};
 	
