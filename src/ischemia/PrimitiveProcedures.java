@@ -15,7 +15,7 @@ public class PrimitiveProcedures {
 	
 	//Basic number arithmetic
 	private static Procedure add = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			int result = 0;
 			
@@ -30,7 +30,7 @@ public class PrimitiveProcedures {
 	};
 
 	private static Procedure subtract = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			int result = ((Fixnum)((Pair)args).car()).getNumber();
 			args = ((Pair)args).cdr();
@@ -46,7 +46,7 @@ public class PrimitiveProcedures {
 	};
 
 	private static Procedure multiply = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			//As a side effect, calling (*) returns 1.			
 			int result = 1;
@@ -62,7 +62,7 @@ public class PrimitiveProcedures {
 	};
 	
 	private static Procedure quotient = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			Pair pargs = (Pair)args;
 			
@@ -73,7 +73,7 @@ public class PrimitiveProcedures {
 	};	
 	
 	private static Procedure remainder = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			Pair pargs = (Pair)args;
 			
@@ -84,7 +84,7 @@ public class PrimitiveProcedures {
 	};	
 	
 	private static Procedure equals = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			//If any two values are not equal to each other, return false
 			while (!(((Pair)((Pair)args)).cdr() instanceof EmptyList)) {
@@ -101,7 +101,7 @@ public class PrimitiveProcedures {
 	};	
 	
 	private static Procedure greater = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			//If a value is not greater than the one before it, return false
 			while (!(((Pair)((Pair)args)).cdr() instanceof EmptyList)) {
@@ -117,7 +117,7 @@ public class PrimitiveProcedures {
 	};	
 	
 	private static Procedure smaller = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			//If a value is not smaller than the one before it, return false
 			while (!(((Pair)((Pair)args)).cdr() instanceof EmptyList)) {
@@ -135,56 +135,56 @@ public class PrimitiveProcedures {
 	//Various procedures for checking the type of an object
 	
 	private static Procedure isNull = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(toBoolean(pcar(args) instanceof EmptyList));
 		}
 	};
 	
 	private static Procedure isBoolean = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(toBoolean(pcar(args) instanceof Boolean));
 		}
 	};
 	
 	private static Procedure isSymbol = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(toBoolean(pcar(args) instanceof Symbol));
 		}
 	};
 	
 	private static Procedure isString = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(toBoolean(pcar(args) instanceof StringLiteral));
 		}
 	};
 	
 	private static Procedure isInteger = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(toBoolean(pcar(args) instanceof Fixnum));
 		}
 	};	
 
 	private static Procedure isChar = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(toBoolean(pcar(args) instanceof Character));
 		}
 	};
 	
 	private static Procedure isPair = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(toBoolean(pcar(args) instanceof Pair));
 		}
 	};
 
 	private static Procedure isProcedure = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(toBoolean(pcar(args) instanceof Procedure));
 		}
@@ -192,7 +192,7 @@ public class PrimitiveProcedures {
 	
 	//Procedures for type conversion
 	private static Procedure charToInt = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(
 					new Fixnum((int)((Character)pcar(args)).getValue()));
@@ -200,7 +200,7 @@ public class PrimitiveProcedures {
 	};
 	
 	private static Procedure intToChar = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(
 					new Character((char)((Fixnum)pcar(args)).getNumber()));
@@ -208,7 +208,7 @@ public class PrimitiveProcedures {
 	};
 	
 	private static Procedure numberToString = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(
 					new StringLiteral(((Fixnum)pcar(args)).print()));
@@ -216,7 +216,7 @@ public class PrimitiveProcedures {
 	};
 	
 	private static Procedure stringToNumber = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			int result;
 			try {
@@ -229,7 +229,7 @@ public class PrimitiveProcedures {
 	};
 	
 	private static Procedure symbolToString = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(
 					new StringLiteral(((Symbol)pcar(args)).getValue()));
@@ -237,7 +237,7 @@ public class PrimitiveProcedures {
 	};	
 
 	private static Procedure stringToSymbol = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			SchemeObject result;
 			try {
@@ -251,28 +251,28 @@ public class PrimitiveProcedures {
 	
 	//Procedures for working with pairs and lists
 	private static Procedure cons = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(new Pair(pcar(args), pcar(pcdr(args))));
 		}
 	};
 	
 	private static Procedure car = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(pcar(pcar(args)));
 		}
 	};
 
 	private static Procedure cdr = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(pcdr(pcar(args)));
 		}
 	};
 	
 	private static Procedure setCar = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			((Pair)pcar(args)).setCar(pcar(pcdr(args)));
 			return EvaluationResult.makeFinished(Symbol.okSymbol);
@@ -280,7 +280,7 @@ public class PrimitiveProcedures {
 	};
 	
 	private static Procedure setCdr = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			((Pair)pcar(args)).setCdr(pcar(pcdr(args)));
 			return EvaluationResult.makeFinished(Symbol.okSymbol);
@@ -288,42 +288,42 @@ public class PrimitiveProcedures {
 	};
 	
 	private static Procedure list = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(args);
 		}
 	};
 	
 	private static Procedure eq = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(toBoolean(pcar(args).equals(pcar(pcdr(args)))));
 		}
 	};
 	
 	private static Procedure interEnv = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(Environment.getGlobalEnvironment());
 		}
 	};
 	
 	private static Procedure nullEnv = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(EmptyList.makeEmptyList());
 		}
 	};
 	
 	private static Procedure initialEnv = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(Environment.getInitialEnvironment());
 		}
 	};
 	
 	private static Procedure load = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			//Load the Scheme code in the file into the REPL.
 			String pathname = ((StringLiteral)((Pair)args).car()).getValue();
@@ -354,28 +354,28 @@ public class PrimitiveProcedures {
 	}
 	
 	private static Procedure read = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(getInputPortFromArgs(args).read());
 		}
 	};
 	
 	private static Procedure readChar = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(getInputPortFromArgs(args).readChar());
 		}
 	};	
 	
 	private static Procedure peekChar = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(getInputPortFromArgs(args).peekChar());
 		}
 	};
 	
 	private static Procedure isInputPort = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(
 					toBoolean((((Pair)args).car()) instanceof InputPort));
@@ -383,7 +383,7 @@ public class PrimitiveProcedures {
 	};
 	
 	private static Procedure openInputPort = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			StringLiteral path = (StringLiteral)pcar(args);
 			return EvaluationResult.makeFinished(new InputPort(path.getValue()));
@@ -391,7 +391,7 @@ public class PrimitiveProcedures {
 	};
 	
 	private static Procedure closeInputPort = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			((InputPort)pcar(args)).closeFile();
 			
@@ -400,7 +400,7 @@ public class PrimitiveProcedures {
 	};
 	
 	private static Procedure isEOFObject = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(
 					toBoolean(pcar(args) instanceof EOFObject));
@@ -418,7 +418,7 @@ public class PrimitiveProcedures {
 	}
 	
 	private static Procedure write = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			getOutputPortFromArgs(args).write(pcar(args));
 			return EvaluationResult.makeFinished(Symbol.okSymbol);
@@ -426,7 +426,7 @@ public class PrimitiveProcedures {
 	};
 
 	private static Procedure writeChar = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			getOutputPortFromArgs(args).writeChar(((Character)pcar(args)).getValue());
 			return EvaluationResult.makeFinished(Symbol.okSymbol);
@@ -434,7 +434,7 @@ public class PrimitiveProcedures {
 	};
 
 	private static Procedure isOutputPort = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			return EvaluationResult.makeFinished(
 					toBoolean((((Pair)args).car()) instanceof OutputPort));
@@ -442,7 +442,7 @@ public class PrimitiveProcedures {
 	};
 	
 	private static Procedure openOutputPort = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			StringLiteral path = (StringLiteral)pcar(args);
 			return EvaluationResult.makeFinished(new OutputPort(path.getValue()));
@@ -450,7 +450,7 @@ public class PrimitiveProcedures {
 	};
 	
 	private static Procedure closeOutputPort = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			((OutputPort)pcar(args)).closeFile();
 			
@@ -459,7 +459,7 @@ public class PrimitiveProcedures {
 	};
 	
 	private static Procedure error = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			while (!(args instanceof EmptyList)) {
 				write.evalProcedure(environment, new Pair(pcar(args), EmptyList.makeEmptyList()));
@@ -474,14 +474,14 @@ public class PrimitiveProcedures {
 	//they are only put here so that things like (define a apply) work.
 
 	public static Procedure eval = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			throw new EvalException("Error: the body of eval is not supposed to be evaluated!");
 		}
 	};
 	
 	public static Procedure apply = new Procedure() {
-		public EvaluationResult evalProcedure(Environment environment,
+		public EvaluationResult evalProcedure(SchemeObject environment,
 				SchemeObject args) throws EvalException {
 			throw new EvalException("Error: the body of apply is not supposed to be evaluated!");
 		}

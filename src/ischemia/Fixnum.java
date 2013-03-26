@@ -7,7 +7,7 @@ public class Fixnum extends SchemeObject {
 	public int getNumber() {return number;}
 	public Fixnum(int number) {this.number = number;}
 	
-	public EvaluationResult eval(Environment env) {return EvaluationResult.makeFinished(this);}
+	public EvaluationResult eval(SchemeObject env) {return EvaluationResult.makeFinished(this);}
 	public String print() {return Integer.toString(number);}
 	
 	public boolean equals(SchemeObject s) {

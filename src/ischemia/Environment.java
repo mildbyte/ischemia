@@ -9,6 +9,13 @@ public class Environment {
 	private Environment() {}
 	
 	/**
+	 * Makes a new environment enclosing the old one and with added bindings.
+	 */
+	public static SchemeObject extendEnvironment(SchemeObject variables, SchemeObject values, SchemeObject baseEnv) {
+		return new Pair(Frame.makeFrame(variables, values), baseEnv);
+	}
+	
+	/**
 	 * Returns the environment with only primitive procedures defined.
 	 */
 	public static SchemeObject getInitialEnvironment() {

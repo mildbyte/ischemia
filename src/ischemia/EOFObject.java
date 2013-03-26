@@ -3,7 +3,7 @@ package ischemia;
 public class EOFObject extends SchemeObject {
 	private static EOFObject theObject;
 	
-	protected EvaluationResult eval(Environment environment)
+	protected EvaluationResult eval(SchemeObject environment)
 			throws EvalException {
 		throw new EvalException("Cannot evaluate an EOF object!");
 	}

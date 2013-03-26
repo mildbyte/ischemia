@@ -22,7 +22,7 @@ public class InputPort extends SchemeObject {
 	
 	private InputPort() {}
 	
-	protected EvaluationResult eval(Environment environment)
+	protected EvaluationResult eval(SchemeObject environment)
 			throws EvalException {
 		throw new EvalException("Cannot evaluate an input port!");
 	}

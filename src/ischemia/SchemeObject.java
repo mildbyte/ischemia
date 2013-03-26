@@ -5,14 +5,14 @@ public abstract class SchemeObject {
 	/**
 	 * Evaluate the object in the current environment, overridden by children.
 	 */
-	protected abstract EvaluationResult eval(Environment environment) throws EvalException;
+	protected abstract EvaluationResult eval(SchemeObject environment) throws EvalException;
 	
 	/**
 	 * Evaluate the object until it no longer needs to be evaluated
 	 * (tail-call optimization)
 	 * (oh crap, I've just invented a trampoline)
 	 */
-	public final SchemeObject evaluate(Environment environment) throws EvalException {
+	public final SchemeObject evaluate(SchemeObject environment) throws EvalException {
 		EvaluationResult evalResult = this.eval(environment);
 		while (!evalResult.isFinished()) {
 			evalResult = evalResult.getResult().eval(evalResult.getEnvironment());

@@ -13,12 +13,12 @@ public class CompoundProcedure extends Procedure {
 	}
 	
 	//Evaluates the procedure in the given environment
-	public EvaluationResult evalProcedure(Environment environment,
+	public EvaluationResult evalProcedure(SchemeObject environment,
 			SchemeObject args) throws EvalException {
 		
 		//Extend the environment so that the arguments passed to the procedure are
 		//visible
-		Environment evalEnv = new Environment(environment, new Frame(unboundArgs, args));
+		SchemeObject evalEnv = Environment.extendEnvironment(unboundArgs, args, environment);
 		
 		//Since we wrapped the body of the procedure in a begin, we know there's only
 		//one element in the body.

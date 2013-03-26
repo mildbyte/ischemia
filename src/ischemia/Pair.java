@@ -26,7 +26,7 @@ public class Pair extends SchemeObject {
 	/**
 	 * Evaluates all objects in a list
 	 */
-	private static SchemeObject evalAll(Environment env, SchemeObject obj) throws EvalException {
+	private static SchemeObject evalAll(SchemeObject env, SchemeObject obj) throws EvalException {
 		if (obj instanceof EmptyList) return obj;
 		return new Pair(((Pair)obj).car().evaluate(env), evalAll(env, ((Pair)obj).cdr()));
 	}
@@ -40,7 +40,7 @@ public class Pair extends SchemeObject {
 		return new Pair(((Pair)args).car, prepareApplyArgs(((Pair)args).cdr));		
 	}
 	
-	public EvaluationResult eval(Environment env) throws EvalException {
+	public EvaluationResult eval(SchemeObject env) throws EvalException {
 		//Unquote quoted lists when evaluating
 		if (car.equals(Symbol.quoteSymbol)) {
 			return EvaluationResult.makeFinished(pcdr().car);
@@ -48,7 +48,7 @@ public class Pair extends SchemeObject {
 		
 		//Mutate the value in the current environment if it exists
 		if (car.equals(Symbol.setSymbol)) {
-			env.setVariableValue(pcdr().car, pcdr().pcdr().car.evaluate(env));
+			Environment.setVariableValue(env, pcdr().car, pcdr().pcdr().car.evaluate(env));
 			return EvaluationResult.makeFinished(Symbol.okSymbol);
 		}
 		
@@ -58,12 +58,12 @@ public class Pair extends SchemeObject {
 				//The first element in the first argument is the name,
 				//the rest are the parameters
 				//the second argument is the procedure body
-				env.defineVariable(pcdr().pcar().car, 
+				Environment.defineVariable(env, pcdr().pcar().car, 
 						new CompoundProcedure(pcdr().pcar().cdr, pcdr().cdr));
 				return EvaluationResult.makeFinished(Symbol.okSymbol);
 						
 			}
-			env.defineVariable(pcdr().car, pcdr().pcdr().car.evaluate(env));
+			Environment.defineVariable(env, pcdr().car, pcdr().pcdr().car.evaluate(env));
 			return EvaluationResult.makeFinished(Symbol.okSymbol);
 		}
 		
@@ -105,15 +105,19 @@ public class Pair extends SchemeObject {
 		//Evaluate the let form by extending the environment to contain
 		//the new bindings and then evaluating the body of the let in the environment.
 		if (car.equals(Symbol.letSymbol)) {
-			Environment evalEnv = new Environment(env);
+			//Create a new empty environment
+			SchemeObject evalEnv = Environment.extendEnvironment(
+					EmptyList.makeEmptyList(), EmptyList.makeEmptyList(), env);
 			
 			//Zipped list of variables and their values
 			SchemeObject varValues = pcdr().car;
+			
+			//Bind the variables in the new environment
 			while (!(varValues instanceof EmptyList)) {
 				Pair currPair = (Pair)((Pair)varValues).car();
 				//If we evaluate the variable in the environment currently being created (evalEnv), we
 				//get the code for the let* form.
-				evalEnv.defineVariable(currPair.car(), ((Pair)(currPair.cdr())).car().evaluate(env));
+				Environment.defineVariable(evalEnv, currPair.car(), ((Pair)(currPair.cdr())).car().evaluate(env));
 				
 				//Advance to the next binding
 				varValues = ((Pair)varValues).cdr;
@@ -204,7 +208,8 @@ public class Pair extends SchemeObject {
 		
 		//Evaluates the eval form
 		if (procedure.equals(PrimitiveProcedures.eval)) {
-			Environment evalEnv = (Environment)pcdr().pcdr().car.evaluate(env);
+			//Retrieve the environment from the arguments
+			SchemeObject evalEnv = pcdr().pcdr().car.evaluate(env);
 			return EvaluationResult.makeUnfinished(pcdr().car.evaluate(env), evalEnv);
 		}		
 		

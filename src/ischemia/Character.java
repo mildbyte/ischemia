@@ -19,7 +19,7 @@ public class Character extends SchemeObject {
 		return (s instanceof Character) && value == ((Character)s).value;
 	}
 	
-	public EvaluationResult eval(Environment env) {
+	public EvaluationResult eval(SchemeObject env) {
 		return EvaluationResult.makeFinished(this);
 	}
 
