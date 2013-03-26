@@ -330,12 +330,16 @@ public class PrimitiveProcedures {
 			
 			InputPort inputPort = new InputPort(pathname);
 			
+			SchemeObject result = Symbol.loadedSymbol;
+			
 			//Read an object, stop if reached the end of file, evaluate the object.
 			while(true) {
 				SchemeObject readObject = inputPort.read();
 				if (readObject instanceof EOFObject) 
-					return EvaluationResult.makeFinished(Symbol.loadedSymbol);
-				readObject.evaluate(environment);
+					return EvaluationResult.makeFinished(result);
+				
+				//Return the last object evaluated.
+				result = readObject.evaluate(environment);
 			}
 		}
 	};
