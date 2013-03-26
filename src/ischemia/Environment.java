@@ -19,7 +19,7 @@ public class Environment {
 	 * Returns the environment with only primitive procedures defined.
 	 */
 	public static SchemeObject getInitialEnvironment() {
-		SchemeObject env = EmptyList.makeEmptyList();
+		SchemeObject env = new Pair(new Pair(EmptyList.makeEmptyList(), EmptyList.makeEmptyList()), EmptyList.makeEmptyList());
 		PrimitiveProcedures.installProcedures(env);
 		
 		return env;

@@ -23,6 +23,9 @@ public class Frame {
 		while (!(variables instanceof EmptyList) && !(values instanceof EmptyList)) {
 			if (variable.equals(((Pair)variables).car()))
 				return ((Pair)values).car();
+			
+			variables = ((Pair)variables).cdr();
+			values = ((Pair)values).cdr();
 		}
 		
 		return null;
@@ -40,10 +43,18 @@ public class Frame {
 				((Pair)values).setCar(value);
 				return;
 			}
+			
+			variables = ((Pair)variables).cdr();
+			values = ((Pair)values).cdr();
 		}	
 		
 		//Add the binding to the frame
+		
+		//Add the variable first
 		((Pair)frame).setCar(new Pair(variable, ((Pair)frame).car()));
+		
+		//Add the value (goes into the car since we've shifted the frame
+		((Pair)frame).setCdr(new Pair(value, ((Pair)frame).cdr()));
 	}
 	
 	
@@ -59,6 +70,9 @@ public class Frame {
 				((Pair)values).setCar(value);
 				return;
 			}
+			
+			variables = ((Pair)variables).cdr();
+			values = ((Pair)values).cdr();
 		}	
 		
 		throw new EvalException("Error: Unbound variable " + variable.print());

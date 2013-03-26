@@ -123,8 +123,20 @@ public class Pair extends SchemeObject {
 				varValues = ((Pair)varValues).cdr;
 			}
 			
+			//Don't forget to wrap the body of the let binding into a begin block.
+			//Otherwise, only the first statement is executed.
+			//This is why the metacircular evaluator didn't work: it used a let binding for
+			//setting up the environment that had a define block and then returned the
+			//resultant environment. The environment turned out to be the 'ok symbol, which
+			//was detrimental to the execution and made me spend an hour refactoring my
+			//HashMap-backed implementation of the environment code into a list-based,
+			//thinking that the list representation was what the metacircular evaluator
+			//relied upon.
+			
+			SchemeObject bodyWrap = new Pair(Symbol.beginSymbol, pcdr().pcdr());
+			
 			//Evaluate the expression in the resultant environment
-			return EvaluationResult.makeUnfinished(pcdr().pcdr().car, evalEnv);
+			return EvaluationResult.makeUnfinished(bodyWrap, evalEnv);
 		}
 		
 		//Evaluate the begin symbol (sequence of events, same as evaluating
