@@ -195,12 +195,12 @@ public class Pair extends SchemeObject {
 		
 		//Evaluates the eval form
 		if (car.equals(Symbol.evalSymbol)) {
-			Environment evalEnv = (Environment)env.lookupValue(pcdr().pcdr().car);
+			Environment evalEnv = (Environment)pcdr().pcdr().car.evaluate(env);
 			return EvaluationResult.makeUnfinished(pcdr().car.evaluate(env), evalEnv);
 		}
 		
 		//Evaluate procedure application
-		SchemeObject procedure = env.lookupValue(car);
+		SchemeObject procedure = car.evaluate(env);
 		
 		if (!(procedure instanceof Procedure)) {
 			throw new EvalException("Unknown procedure!");
