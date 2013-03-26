@@ -311,7 +311,7 @@ public class PrimitiveProcedures {
 	private static Procedure nullEnv = new Procedure() {
 		public EvaluationResult evalProcedure(Environment environment,
 				SchemeObject args) throws EvalException {
-			return EvaluationResult.makeFinished(new Environment());
+			return EvaluationResult.makeFinished(EmptyList.makeEmptyList());
 		}
 	};
 	
@@ -487,62 +487,62 @@ public class PrimitiveProcedures {
 		}
 	};	
 	
-	public static void installProcedures(Environment env) {
-		env.defineVariable(Symbol.unsafeMakeSymbol("null?"), isNull);
-		env.defineVariable(Symbol.unsafeMakeSymbol("boolean?"), isBoolean);
-		env.defineVariable(Symbol.unsafeMakeSymbol("integer?"), isInteger);
-		env.defineVariable(Symbol.unsafeMakeSymbol("symbol?"), isSymbol);
-		env.defineVariable(Symbol.unsafeMakeSymbol("char?"), isChar);
-		env.defineVariable(Symbol.unsafeMakeSymbol("string?"), isString);
-		env.defineVariable(Symbol.unsafeMakeSymbol("pair?"), isPair);
-		env.defineVariable(Symbol.unsafeMakeSymbol("procedure?"), isProcedure);
+	public static void installProcedures(SchemeObject env) {
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("null?"), isNull);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("boolean?"), isBoolean);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("integer?"), isInteger);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("symbol?"), isSymbol);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("char?"), isChar);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("string?"), isString);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("pair?"), isPair);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("procedure?"), isProcedure);
 		
-		env.defineVariable(Symbol.unsafeMakeSymbol("char->integer"), charToInt);
-		env.defineVariable(Symbol.unsafeMakeSymbol("integer->char"), intToChar);
-		env.defineVariable(Symbol.unsafeMakeSymbol("number->string"), numberToString);
-		env.defineVariable(Symbol.unsafeMakeSymbol("string->number"), stringToNumber);
-		env.defineVariable(Symbol.unsafeMakeSymbol("symbol->string"), symbolToString);
-		env.defineVariable(Symbol.unsafeMakeSymbol("string->symbol"), stringToSymbol);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("char->integer"), charToInt);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("integer->char"), intToChar);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("number->string"), numberToString);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("string->number"), stringToNumber);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("symbol->string"), symbolToString);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("string->symbol"), stringToSymbol);
 		
-		env.defineVariable(Symbol.unsafeMakeSymbol("+"), add);
-		env.defineVariable(Symbol.unsafeMakeSymbol("-"), subtract);
-		env.defineVariable(Symbol.unsafeMakeSymbol("*"), multiply);
-		env.defineVariable(Symbol.unsafeMakeSymbol("quotient"), quotient);
-		env.defineVariable(Symbol.unsafeMakeSymbol("remainder"), remainder);
-		env.defineVariable(Symbol.unsafeMakeSymbol("="), equals);
-		env.defineVariable(Symbol.unsafeMakeSymbol(">"), greater);
-		env.defineVariable(Symbol.unsafeMakeSymbol("<"), smaller);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("+"), add);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("-"), subtract);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("*"), multiply);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("quotient"), quotient);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("remainder"), remainder);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("="), equals);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol(">"), greater);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("<"), smaller);
 		
-		env.defineVariable(Symbol.unsafeMakeSymbol("cons"), cons);
-		env.defineVariable(Symbol.unsafeMakeSymbol("car"), car);
-		env.defineVariable(Symbol.unsafeMakeSymbol("cdr"), cdr);
-		env.defineVariable(Symbol.unsafeMakeSymbol("set-car!"), setCar);
-		env.defineVariable(Symbol.unsafeMakeSymbol("set-cdr!"), setCdr);
-		env.defineVariable(Symbol.unsafeMakeSymbol("list"), list);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("cons"), cons);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("car"), car);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("cdr"), cdr);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("set-car!"), setCar);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("set-cdr!"), setCdr);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("list"), list);
 		
-		env.defineVariable(Symbol.unsafeMakeSymbol("eq?"), eq);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("eq?"), eq);
 		
-		env.defineVariable(Symbol.unsafeMakeSymbol("interaction-environment"), interEnv);
-		env.defineVariable(Symbol.unsafeMakeSymbol("null-environment"), nullEnv);
-		env.defineVariable(Symbol.unsafeMakeSymbol("environment"), initialEnv);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("interaction-environment"), interEnv);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("null-environment"), nullEnv);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("environment"), initialEnv);
 		
-		env.defineVariable(Symbol.unsafeMakeSymbol("load"), load);
-		env.defineVariable(Symbol.unsafeMakeSymbol("read"), read);
-		env.defineVariable(Symbol.unsafeMakeSymbol("read-char"), readChar);
-		env.defineVariable(Symbol.unsafeMakeSymbol("peek-char"), peekChar);
-		env.defineVariable(Symbol.unsafeMakeSymbol("input-port?"), isInputPort);
-		env.defineVariable(Symbol.unsafeMakeSymbol("open-input-file"), openInputPort);
-		env.defineVariable(Symbol.unsafeMakeSymbol("close-input-file"), closeInputPort);
-		env.defineVariable(Symbol.unsafeMakeSymbol("eof-object?"), isEOFObject);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("load"), load);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("read"), read);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("read-char"), readChar);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("peek-char"), peekChar);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("input-port?"), isInputPort);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("open-input-file"), openInputPort);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("close-input-file"), closeInputPort);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("eof-object?"), isEOFObject);
 		
-		env.defineVariable(Symbol.unsafeMakeSymbol("write"), write);
-		env.defineVariable(Symbol.unsafeMakeSymbol("write-char"), writeChar);
-		env.defineVariable(Symbol.unsafeMakeSymbol("output-port?"), isOutputPort);
-		env.defineVariable(Symbol.unsafeMakeSymbol("open-output-file"), openOutputPort); 
-		env.defineVariable(Symbol.unsafeMakeSymbol("close-output-file"), closeOutputPort);
-		env.defineVariable(Symbol.unsafeMakeSymbol("error"), error);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("write"), write);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("write-char"), writeChar);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("output-port?"), isOutputPort);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("open-output-file"), openOutputPort); 
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("close-output-file"), closeOutputPort);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("error"), error);
 		
-		env.defineVariable(Symbol.unsafeMakeSymbol("eval"), eval);
-		env.defineVariable(Symbol.unsafeMakeSymbol("apply"), apply);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("eval"), eval);
+		Environment.defineVariable(env, Symbol.unsafeMakeSymbol("apply"), apply);
 	}
 }
