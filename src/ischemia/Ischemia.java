@@ -10,8 +10,6 @@ public class Ischemia {
 		
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		
-		StandardLibrary.installSTL(Environment.getGlobalEnvironment());
-		
 		while (true) {
 			System.out.print("> ");
 

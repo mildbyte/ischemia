@@ -470,6 +470,23 @@ public class PrimitiveProcedures {
 		}
 	};
 	
+	//eval and apply are dummy functions that are not supposed to be evaluated,
+	//they are only put here so that things like (define a apply) work.
+
+	public static Procedure eval = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			throw new EvalException("Error: the body of eval is not supposed to be evaluated!");
+		}
+	};
+	
+	public static Procedure apply = new Procedure() {
+		public EvaluationResult evalProcedure(Environment environment,
+				SchemeObject args) throws EvalException {
+			throw new EvalException("Error: the body of apply is not supposed to be evaluated!");
+		}
+	};	
+	
 	public static void installProcedures(Environment env) {
 		env.defineVariable(Symbol.unsafeMakeSymbol("null?"), isNull);
 		env.defineVariable(Symbol.unsafeMakeSymbol("boolean?"), isBoolean);
@@ -524,5 +541,8 @@ public class PrimitiveProcedures {
 		env.defineVariable(Symbol.unsafeMakeSymbol("open-output-file"), openOutputPort); 
 		env.defineVariable(Symbol.unsafeMakeSymbol("close-output-file"), closeOutputPort);
 		env.defineVariable(Symbol.unsafeMakeSymbol("error"), error);
+		
+		env.defineVariable(Symbol.unsafeMakeSymbol("eval"), eval);
+		env.defineVariable(Symbol.unsafeMakeSymbol("apply"), apply);
 	}
 }

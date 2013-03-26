@@ -184,9 +184,18 @@ public class Pair extends SchemeObject {
 			return EvaluationResult.makeFinished(Boolean.FalseValue);
 		}
 		
+		//Evaluate procedure application
+		SchemeObject procedure = car.evaluate(env);
+		
+		if (!(procedure instanceof Procedure)) {
+			throw new EvalException("Unknown procedure!");
+		}
+		
+		//Special forms first: their arguments can't be evaluated.
+		
 		//The apply form: apply the second element to the arguments formed by the list
 		//in the third element (or the rest of the arguments to apply + the list in the last position)
-		if (car.equals(Symbol.applySymbol)) {
+		if (procedure.equals(PrimitiveProcedures.apply)) {
 			SchemeObject evaluatedArgs = evalAll(env, pcdr().pcdr());
 
 			return EvaluationResult.makeUnfinished(
@@ -194,17 +203,10 @@ public class Pair extends SchemeObject {
 		}
 		
 		//Evaluates the eval form
-		if (car.equals(Symbol.evalSymbol)) {
+		if (procedure.equals(PrimitiveProcedures.eval)) {
 			Environment evalEnv = (Environment)pcdr().pcdr().car.evaluate(env);
 			return EvaluationResult.makeUnfinished(pcdr().car.evaluate(env), evalEnv);
-		}
-		
-		//Evaluate procedure application
-		SchemeObject procedure = car.evaluate(env);
-		
-		if (!(procedure instanceof Procedure)) {
-			throw new EvalException("Unknown procedure!");
-		}
+		}		
 		
 		return ((Procedure)procedure).evalProcedure(env, evalAll(env, cdr));
 	}

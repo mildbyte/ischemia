@@ -42,7 +42,7 @@ public class Frame {
 	 * Sets the value of a variable if it exists, raises an exception otherwise
 	 */
 	public void setValue(SchemeObject variable, SchemeObject value) throws EvalException {
-		if (!mappings.containsKey(variable)) throw new EvalException("Unbound variable!");
+		if (!mappings.containsKey(variable)) throw new EvalException("Error: Unbound variable " + variable.print());
 		
 		defineVariable(variable, value);
 	}

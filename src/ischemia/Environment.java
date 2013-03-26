@@ -50,7 +50,7 @@ public class Environment extends SchemeObject {
 		SchemeObject value = frame.lookupValue(variable);
 		if (value == null) {
 			if (enclosingEnvironment == null) {
-				throw new EvalException("Unbound variable!");
+				throw new EvalException("Error: Unbound variable " + variable.print());
 			}
 			
 			return enclosingEnvironment.lookupValue(variable);
