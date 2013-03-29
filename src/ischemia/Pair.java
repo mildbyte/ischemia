@@ -59,7 +59,7 @@ public class Pair extends SchemeObject {
 				//the rest are the parameters
 				//the second argument is the procedure body
 				env.defineVariable(pcdr().pcar().car, 
-						new CompoundProcedure(pcdr().pcar().cdr, pcdr().cdr));
+						new CompoundProcedure(pcdr().pcar().cdr, pcdr().cdr, env));
 				return EvaluationResult.makeFinished(Symbol.okSymbol);
 						
 			}
@@ -155,7 +155,7 @@ public class Pair extends SchemeObject {
 		//Evaluate the lambda symbol
 		if (car.equals(Symbol.lambdaSymbol)) {
 			return EvaluationResult.makeFinished(
-					new CompoundProcedure(pcdr().car, pcdr().cdr)); 
+					new CompoundProcedure(pcdr().car, pcdr().cdr, env)); 
 		}
 		
 		//Evaluate the and symbol (short-circuiting, does not evaluate the rest of the conditions
