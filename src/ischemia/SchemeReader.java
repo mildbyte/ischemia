@@ -85,7 +85,7 @@ public class SchemeReader {
 		//If we see a closing bracket, we've reached the end of the list
 		//(the empty list will be consed to the previous pair)
 		if (current == ')') {
-			current = (char)reader.read();
+			reader.read();
 			return EmptyList.makeEmptyList();
 		}
 		
@@ -96,7 +96,7 @@ public class SchemeReader {
 		current = (char)peek(reader);		
 		
 		if (current == '.') { //Dotted pair
-			current = (char)reader.read();
+			reader.read();
 			current = (char)peek(reader);
 			if (!isDelimiter(current)) {
 				throw new ParseException("Dot not followed by a delimiter!");

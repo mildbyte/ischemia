@@ -38,11 +38,7 @@ public class Symbol extends SchemeObject {
 	public String print() {
 		return value;
 	}
-	
-	public boolean equals(Symbol symbol) {
-		return (this.value == symbol.value);
-	}
-	
+
 	public int hashCode() {return value.hashCode();}
 	
 	/**

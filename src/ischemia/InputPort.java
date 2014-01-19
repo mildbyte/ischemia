@@ -74,6 +74,7 @@ public class InputPort extends SchemeObject {
 	}
 	
 	public InputPort(String filename) throws EvalException {
+        this.filename = filename;
 		try {
 			fileReader = new BufferedReader(new FileReader(filename));
 		} catch (IOException e) {
