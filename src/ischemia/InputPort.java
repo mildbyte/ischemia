@@ -65,7 +65,7 @@ public class InputPort extends SchemeObject {
 		try {
 			readObj = SchemeReader.read(fileReader);
 		} catch (ParseException e) {
-			throw new EvalException("Error while parsing the file!");
+			throw new EvalException("Error while parsing the file: " + e.getMessage());
 		}
 		
 		if (readObj == null) return EOFObject.makeEOFObject();

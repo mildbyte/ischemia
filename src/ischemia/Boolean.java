@@ -22,6 +22,6 @@ public class Boolean extends SchemeObject {
 			return TrueValue;
 		} else if (expression.equals("#f")) {
 			return FalseValue;
-		} else throw new ParseException("Unknown boolean literal.");
+		} else throw new ParseException("Unknown boolean literal " + expression);
 	}
 }

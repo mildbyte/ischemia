@@ -10,7 +10,7 @@ public class Character extends SchemeObject {
 		if (expression.equals("#\\space")) {return new Character(' ');}
 		if (expression.length() == 3) {return new Character(expression.charAt(2));}
 		
-		throw new ParseException("Unknown character literal!");
+		throw new ParseException("Unknown character literal " + expression);
 	}
 	
 	public Character(char value) {this.value = value;}

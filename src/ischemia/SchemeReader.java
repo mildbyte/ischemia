@@ -148,7 +148,7 @@ public class SchemeReader {
 						if (current == 'n') {
 							current = '\n';
 						} else if (!(current == '\\' || current == '"')) {
-							throw new ParseException("Invalid escape character.");
+							throw new ParseException("Invalid escape character " + current);
 						}
 					}
 					expression += current;
@@ -167,7 +167,7 @@ public class SchemeReader {
 				expression = current + readToDelimiter(reader);
 			}
 		} catch (IOException e) {
-			throw new ParseException("IO Exception!");
+			throw new ParseException("IO Exception " + e.getMessage());
 		}
 		
 		expression = expression.trim();

@@ -62,7 +62,7 @@ public class Symbol extends SchemeObject {
 	public static Symbol makeSymbol(String symbol) throws ParseException {
 		//Now you have two problems.
 		if (!symbol.matches("^[a-zA-Z0-9\\+-=/\\*\\!\\?><]+$")) {
-			throw new ParseException("Invalid symbol!");
+			throw new ParseException("Invalid symbol " + symbol);
 		}
 		
 		return unsafeMakeSymbol(symbol);
